@@ -36,12 +36,16 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build (copiar archivos públicos)
-        if: steps.check.outputs.ready == 'true'
-        run: |
-          mkdir -p dist
-          cp -r index.html films.html contacto.html css js dist/
-          [ -d assets ] && cp -r assets dist/ || true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # SITE_URL: variable del repo (Settings → Secrets and variables → Actions → Variables).
+      # Cuando tengamos dominio se carga ahí, ej. https://felixmataitis.com
+      - name: Build
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://felix-mataitis-weddings.pages.dev' }}
+        run: node scripts/build.mjs
 
       - name: Create Pages project (si no existe)
         if: steps.check.outputs.ready == 'true'

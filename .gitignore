@@ -5,3 +5,6 @@ node_modules/
 dist/
 build/
 .claude/settings.local.json
+
+# Material original (videos en bruto, no se versiona)
+_material/

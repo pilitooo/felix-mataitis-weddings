@@ -1,0 +1,9 @@
+{
+  "name": "felix-mataitis-weddings",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && python3 -m http.server 8080 -d dist"
+  }
+}

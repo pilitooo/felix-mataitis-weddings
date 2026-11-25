@@ -1,0 +1,55 @@
+---
+{
+  "path": "/contacto/",
+  "title": "Contacto · Consultá tu fecha | Felix Mataitis",
+  "description": "Consultá disponibilidad para el video de tu casamiento en Uruguay. Escribime con la fecha y el lugar y te respondo en menos de 48 horas.",
+  "crumb": "Contacto",
+  "priority": 0.8,
+  "schema": ["business"]
+}
+---
+    <section class="page-head">
+      <div class="wrap center">
+        {{breadcrumbs}}
+        <p class="eyebrow">Contacto</p>
+        <h1 class="display">Contame de su <em>casamiento</em></h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap contact">
+        <div class="contact-info reveal">
+          <p class="lead">Tomo una cantidad limitada de bodas por año para dedicarle a cada una el tiempo que merece.</p>
+          <p>Escríbanme con la fecha y el lugar, y les respondo en menos de 48 horas con disponibilidad y propuestas.</p>
+          <dl>
+            <dt>Email</dt>
+            <dd><a href="mailto:{{site.email}}">{{site.email}}</a></dd>
+            <dt>WhatsApp</dt>
+            <dd>{{site.whatsapp}}</dd>
+            <dt>Instagram</dt>
+            <dd><a href="{{site.instagram}}" target="_blank" rel="noopener">{{site.instagramHandle}}</a></dd>
+            <dt>Zona</dt>
+            <dd>Todo Uruguay y bodas de destino</dd>
+          </dl>
+        </div>
+
+        <form class="form reveal" data-contact-form>
+          <div class="field"><label for="n1">Nombres</label><input id="n1" name="nombres" autocomplete="name" required></div>
+          <div class="field"><label for="em">Email</label><input id="em" type="email" name="email" autocomplete="email" required></div>
+          <div class="field"><label for="fe">Fecha del casamiento</label><input id="fe" type="date" name="fecha"></div>
+          <div class="field"><label for="lu">Lugar</label><input id="lu" name="lugar" placeholder="Ej: José Ignacio"></div>
+          <div class="field full"><label for="co">¿Cómo me conocieron?</label>
+            <select id="co" name="origen">
+              <option value="">Elegir…</option>
+              <option>Instagram</option>
+              <option>Recomendación</option>
+              <option>Google</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="field full"><label for="ms">Cuéntenme de ustedes</label><textarea id="ms" name="mensaje"></textarea></div>
+          <div class="full"><button class="btn" type="submit">Enviar consulta</button></div>
+          <p class="form-note full" role="status"></p>
+        </form>
+      </div>
+    </section>

@@ -1,0 +1,117 @@
+---
+{
+  "path": "/",
+  "title": "Videógrafo de bodas en Uruguay | Felix Mataitis Films",
+  "ogTitle": "Felix Mataitis — Videógrafo de bodas en Uruguay",
+  "description": "Videógrafo de bodas en Uruguay. Películas de casamiento cinematográficas y naturales en Montevideo, Punta del Este, José Ignacio y Colonia. Consultá tu fecha.",
+  "header": "hero",
+  "priority": 1.0,
+  "schema": ["website", "business"],
+  "head": "<link rel=\"preload\" as=\"style\" href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&display=swap\">"
+}
+---
+    <!-- HERO: el video se carga recién después del primer render (ver data-src). -->
+    <section class="hero">
+      <div class="ph ph--warm hero-media">
+        <div class="drift"></div>
+        <!--
+        <img src="/assets/posters/hero.jpg" alt="" width="1920" height="1080" fetchpriority="high">
+        <video data-src="/assets/videos/hero.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+        -->
+        <span class="ph-label">Hero · video loop 16:9</span>
+      </div>
+      <div class="hero-content">
+        <h1 class="eyebrow">Videógrafo de bodas en Uruguay</h1>
+        <p class="display">Películas de <em>casamiento</em></p>
+        <p class="lead">Lo que se siente, más que lo que se ve.</p>
+      </div>
+      <a class="scroll-cue" href="#manifiesto">Descubrir</a>
+    </section>
+
+    <section class="section" id="manifiesto">
+      <div class="wrap manifesto reveal">
+        <p class="eyebrow">Filmación de casamientos</p>
+        <h2 class="display">Filmo bodas como si fueran <em>cine</em>: con calma, con luz natural y sin pedirles que actúen. Lo importante pasa cuando nadie mira.</h2>
+      </div>
+    </section>
+
+    <section>
+      <a class="feature reveal" href="/films/sofia-martin-jose-ignacio/">
+        <div class="ph ph--warm"><span class="ph-label">Film destacado · 21:9</span></div>
+        <span class="play" aria-hidden="true"></span>
+        <div class="feature-caption">
+          <div>
+            <p class="eyebrow eyebrow--light">Film destacado · José Ignacio</p>
+            <h2>Sofía &amp; Martín</h2>
+          </div>
+          <span class="link-arrow">Ver film →</span>
+        </div>
+      </a>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="center reveal section-head">
+          <p class="eyebrow">Films</p>
+          <h2 class="display">Historias recientes</h2>
+        </div>
+        {{films:featured}}
+        <div class="center section-foot">
+          <a class="btn" href="/films/">Ver todos los films</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--deep">
+      <div class="wrap about">
+        <div class="about-media reveal">
+          <div class="ph"><span class="ph-label">Retrato · 4:5</span></div>
+          <div class="ph ph--cool"><span class="ph-label">Backstage</span></div>
+        </div>
+        <div class="about-text reveal">
+          <p class="eyebrow">Sobre mí</p>
+          <h2 class="display">Hola, soy <em>Felix</em>.</h2>
+          <p>Soy filmmaker y videógrafo de bodas en Uruguay. Trabajo de forma discreta, casi invisible, para que se olviden de la cámara y disfruten su día.</p>
+          <p>Filmo casamientos en Montevideo, Punta del Este, José Ignacio, Colonia y en cualquier rincón del país, y viajo a donde haga falta.</p>
+          <a class="link-arrow" href="/sobre-mi/">Conocerme →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <div class="wrap">
+        <div class="center reveal">
+          <p class="eyebrow">Servicios</p>
+          <h2 class="display">Cada casamiento, su <em>película</em></h2>
+        </div>
+        <div class="steps">
+          <a class="step reveal" href="/servicios/#pelicula">
+            <span class="step-num">01</span>
+            <h3>Película de boda</h3>
+            <p>El día completo, contado como una película de autor. De la preparación a la última canción.</p>
+          </a>
+          <a class="step reveal" href="/servicios/#elopement">
+            <span class="step-num">02</span>
+            <h3>Elopements y bodas íntimas</h3>
+            <p>Para parejas que se casan solas o con pocos invitados, en la costa, el campo o una bodega.</p>
+          </a>
+          <a class="step reveal" href="/servicios/#destino">
+            <span class="step-num">03</span>
+            <h3>Bodas de destino</h3>
+            <p>Si viven afuera y eligieron Uruguay para casarse, los acompaño en toda la planificación.</p>
+          </a>
+        </div>
+        <div class="center section-foot">
+          <a class="btn btn--light" href="/servicios/">Ver servicios</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap quote reveal">
+        <blockquote>“[Testimonio placeholder] Vimos la película y volvimos a sentir exactamente lo mismo que ese día.”</blockquote>
+        <cite>Pareja · Lugar</cite>
+      </div>
+    </section>
+
+{{cta}}

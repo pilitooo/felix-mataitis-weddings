@@ -1,0 +1,30 @@
+{
+  "name": "Felix Mataitis",
+  "brand": "Felix Mataitis Films",
+  "tagline": "Videógrafo de bodas en Uruguay",
+  "description": "Felix Mataitis, videógrafo y filmmaker de bodas en Uruguay. Películas de casamiento cinematográficas y naturales en Montevideo, Punta del Este, José Ignacio, Colonia y todo el país.",
+  "locale": "es_UY",
+  "lang": "es-UY",
+  "email": "hola@ejemplo.com",
+  "whatsapp": "+598 00 000 000",
+  "instagram": "https://www.instagram.com/",
+  "instagramHandle": "@usuario",
+  "country": "UY",
+  "areaServed": ["Montevideo", "Punta del Este", "José Ignacio", "Maldonado", "Canelones", "Colonia del Sacramento", "Carmelo", "Rocha", "Uruguay"],
+  "defaultOgImage": "/assets/og/default.jpg",
+  "nav": [
+    { "label": "Inicio", "href": "/" },
+    { "label": "Films", "href": "/films/" },
+    { "label": "Servicios", "href": "/servicios/" },
+    { "label": "Sobre mí", "href": "/sobre-mi/" },
+    { "label": "Contacto", "href": "/contacto/" }
+  ],
+  "footerSeo": [
+    { "label": "Videógrafo de bodas en Montevideo", "href": "/videografo-bodas-montevideo/" },
+    { "label": "Bodas en Punta del Este y José Ignacio", "href": "/videografo-bodas-punta-del-este/" },
+    { "label": "Casamientos en Colonia y Carmelo", "href": "/videografo-bodas-colonia-carmelo/" },
+    { "label": "Bodas en bodegas de Uruguay", "href": "/bodas-en-bodegas-uruguay/" },
+    { "label": "Bodas de destino en Uruguay", "href": "/bodas-de-destino-uruguay/" },
+    { "label": "Preguntas frecuentes", "href": "/preguntas-frecuentes/" }
+  ]
+}
