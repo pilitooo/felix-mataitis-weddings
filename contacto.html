@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto — Felix Mataitis</title>
+  <meta name="description" content="Consultá disponibilidad para tu boda con Felix Mataitis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="site-header site-header--dark">
+    <div class="wrap">
+      <a class="brand" href="index.html">Felix Mataitis<small>Wedding Films</small></a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="films.html">Films</a>
+        <a href="index.html#sobre-mi">Sobre mí</a>
+        <a href="contacto.html" aria-current="page">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="wrap center">
+        <p class="eyebrow">Contacto</p>
+        <h1 class="display">Contame de su <em>boda</em></h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap contact">
+        <div class="contact-info reveal">
+          <p class="lead" style="margin-top:0">Tomo una cantidad limitada de bodas por año para dedicarle a cada una el tiempo que merece.</p>
+          <p>Escribanme con la fecha y el lugar, y les respondo en menos de 48 horas con disponibilidad y propuestas.</p>
+          <dl>
+            <dt>Email</dt>
+            <dd>[email@dominio.com]</dd>
+            <dt>WhatsApp</dt>
+            <dd>[+00 000 000 0000]</dd>
+            <dt>Instagram</dt>
+            <dd>[@usuario]</dd>
+          </dl>
+        </div>
+
+        <form class="form reveal" data-contact-form>
+          <div class="field"><label for="n1">Nombres</label><input id="n1" name="nombres" required></div>
+          <div class="field"><label for="em">Email</label><input id="em" type="email" name="email" required></div>
+          <div class="field"><label for="fe">Fecha de la boda</label><input id="fe" type="date" name="fecha"></div>
+          <div class="field"><label for="lu">Lugar</label><input id="lu" name="lugar"></div>
+          <div class="field full"><label for="co">¿Cómo me conocieron?</label>
+            <select id="co" name="origen">
+              <option value="">Elegir…</option>
+              <option>Instagram</option>
+              <option>Recomendación</option>
+              <option>Google</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="field full"><label for="ms">Cuéntenme de ustedes</label><textarea id="ms" name="mensaje"></textarea></div>
+          <div class="full"><button class="btn" type="submit">Enviar consulta</button></div>
+          <p class="form-note full"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <a class="brand" href="index.html">Felix Mataitis<small>Wedding Films</small></a>
+      <div class="footer-links">
+        <a href="films.html">Films</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <p class="copyright">© <span data-year></span> Felix Mataitis. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/films.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
