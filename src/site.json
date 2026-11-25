@@ -1,14 +1,24 @@
 {
   "name": "Felix Mataitis",
   "brand": "Felix Mataitis Films",
-  "email": "hola@ejemplo.com",
-  "whatsapp": "+598 00 000 000",
-  "instagram": "https://www.instagram.com/",
-  "instagramHandle": "@usuario",
+  "email": "mataitislix@gmail.com",
+  "whatsapp": "+598 92 454 626",
+  "whatsappLink": "https://wa.me/59892454626",
+  "instagram": "https://www.instagram.com/mataitisfelix/",
+  "instagramHandle": "@mataitisfelix",
   "country": "UY",
-  "areaServed": ["Montevideo", "Punta del Este", "José Ignacio", "Maldonado", "Canelones", "Colonia del Sacramento", "Carmelo", "Rocha", "Uruguay"],
+  "areaServed": [
+    "Montevideo",
+    "Punta del Este",
+    "José Ignacio",
+    "Maldonado",
+    "Canelones",
+    "Colonia del Sacramento",
+    "Carmelo",
+    "Rocha",
+    "Uruguay"
+  ],
   "defaultOgImage": "/assets/og/default.jpg",
-
   "i18n": {
     "es": {
       "lang": "es-UY",
@@ -34,28 +44,76 @@
       "ctaTitle": "¿Hablamos de su <em>casamiento</em>?",
       "filterAll": "Todos",
       "filterLabel": "Filtrar films",
-      "categories": { "boda": "Bodas", "elopement": "Elopement", "preboda": "Preboda", "destino": "Destino" },
-      "kinds": { "boda": "Video de boda", "elopement": "Elopement", "preboda": "Video preboda", "destino": "Boda de destino" },
+      "categories": {
+        "boda": "Bodas",
+        "elopement": "Elopement",
+        "preboda": "Preboda",
+        "destino": "Destino"
+      },
+      "kinds": {
+        "boda": "Video de boda",
+        "elopement": "Elopement",
+        "preboda": "Video preboda",
+        "destino": "Boda de destino"
+      },
       "filmAlt": "video de boda en",
       "filmSoon": "Film · próximamente",
       "play": "Reproducir el film de",
       "more": "Más films",
-      "meta": { "place": "Lugar", "venue": "Locación", "season": "Temporada", "type": "Tipo" },
+      "meta": {
+        "place": "Lugar",
+        "venue": "Locación",
+        "season": "Temporada",
+        "type": "Tipo"
+      },
       "filmDescSuffix": "Film de Felix Mataitis, videógrafo de bodas en Uruguay.",
       "nav": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Films", "href": "/films/" },
-        { "label": "Servicios", "href": "/servicios/" },
-        { "label": "Sobre mí", "href": "/sobre-mi/" },
-        { "label": "Contacto", "href": "/contacto/" }
+        {
+          "label": "Inicio",
+          "href": "/"
+        },
+        {
+          "label": "Films",
+          "href": "/films/"
+        },
+        {
+          "label": "Servicios",
+          "href": "/servicios/"
+        },
+        {
+          "label": "Sobre mí",
+          "href": "/sobre-mi/"
+        },
+        {
+          "label": "Contacto",
+          "href": "/contacto/"
+        }
       ],
       "footerSeo": [
-        { "label": "Videógrafo de bodas en Montevideo", "href": "/videografo-bodas-montevideo/" },
-        { "label": "Bodas en Punta del Este y José Ignacio", "href": "/videografo-bodas-punta-del-este/" },
-        { "label": "Casamientos en Colonia y Carmelo", "href": "/videografo-bodas-colonia-carmelo/" },
-        { "label": "Bodas en bodegas de Uruguay", "href": "/bodas-en-bodegas-uruguay/" },
-        { "label": "Bodas de destino en Uruguay", "href": "/bodas-de-destino-uruguay/" },
-        { "label": "Preguntas frecuentes", "href": "/preguntas-frecuentes/" }
+        {
+          "label": "Videógrafo de bodas en Montevideo",
+          "href": "/videografo-bodas-montevideo/"
+        },
+        {
+          "label": "Bodas en Punta del Este y José Ignacio",
+          "href": "/videografo-bodas-punta-del-este/"
+        },
+        {
+          "label": "Casamientos en Colonia y Carmelo",
+          "href": "/videografo-bodas-colonia-carmelo/"
+        },
+        {
+          "label": "Bodas en bodegas de Uruguay",
+          "href": "/bodas-en-bodegas-uruguay/"
+        },
+        {
+          "label": "Bodas de destino en Uruguay",
+          "href": "/bodas-de-destino-uruguay/"
+        },
+        {
+          "label": "Preguntas frecuentes",
+          "href": "/preguntas-frecuentes/"
+        }
       ]
     },
     "en": {
@@ -82,25 +140,64 @@
       "ctaTitle": "Let's talk about your <em>wedding</em>",
       "filterAll": "All",
       "filterLabel": "Filter films",
-      "categories": { "boda": "Weddings", "elopement": "Elopements", "preboda": "Engagement", "destino": "Destination" },
-      "kinds": { "boda": "Wedding film", "elopement": "Elopement", "preboda": "Engagement film", "destino": "Destination wedding" },
+      "categories": {
+        "boda": "Weddings",
+        "elopement": "Elopements",
+        "preboda": "Engagement",
+        "destino": "Destination"
+      },
+      "kinds": {
+        "boda": "Wedding film",
+        "elopement": "Elopement",
+        "preboda": "Engagement film",
+        "destino": "Destination wedding"
+      },
       "filmAlt": "wedding film in",
       "filmSoon": "Film · coming soon",
       "play": "Play the film of",
       "more": "More films",
-      "meta": { "place": "Location", "venue": "Venue", "season": "Season", "type": "Type" },
+      "meta": {
+        "place": "Location",
+        "venue": "Venue",
+        "season": "Season",
+        "type": "Type"
+      },
       "filmDescSuffix": "A film by Felix Mataitis, wedding videographer in Uruguay.",
       "nav": [
-        { "label": "Home", "href": "/en/" },
-        { "label": "Films", "href": "/en/films/" },
-        { "label": "Services", "href": "/en/services/" },
-        { "label": "About", "href": "/en/about/" },
-        { "label": "Contact", "href": "/en/contact/" }
+        {
+          "label": "Home",
+          "href": "/en/"
+        },
+        {
+          "label": "Films",
+          "href": "/en/films/"
+        },
+        {
+          "label": "Services",
+          "href": "/en/services/"
+        },
+        {
+          "label": "About",
+          "href": "/en/about/"
+        },
+        {
+          "label": "Contact",
+          "href": "/en/contact/"
+        }
       ],
       "footerSeo": [
-        { "label": "Destination wedding videographer in Uruguay", "href": "/en/destination-wedding-videographer-uruguay/" },
-        { "label": "Punta del Este & José Ignacio weddings", "href": "/en/punta-del-este-wedding-videographer/" },
-        { "label": "FAQ", "href": "/en/faq/" }
+        {
+          "label": "Destination wedding videographer in Uruguay",
+          "href": "/en/destination-wedding-videographer-uruguay/"
+        },
+        {
+          "label": "Punta del Este & José Ignacio weddings",
+          "href": "/en/punta-del-este-wedding-videographer/"
+        },
+        {
+          "label": "FAQ",
+          "href": "/en/faq/"
+        }
       ]
     }
   }

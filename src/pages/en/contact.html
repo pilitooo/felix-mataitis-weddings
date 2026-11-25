@@ -26,7 +26,7 @@
             <dt>Email</dt>
             <dd><a href="mailto:{{site.email}}">{{site.email}}</a></dd>
             <dt>WhatsApp</dt>
-            <dd>{{site.whatsapp}}</dd>
+            <dd><a href="{{site.whatsappLink}}" target="_blank" rel="noopener">{{site.whatsapp}}</a></dd>
             <dt>Instagram</dt>
             <dd><a href="{{site.instagram}}" target="_blank" rel="noopener">{{site.instagramHandle}}</a></dd>
             <dt>Area</dt>
@@ -34,14 +34,14 @@
           </dl>
         </div>
 
-        <form class="form reveal" data-contact-form>
+        <form class="form reveal" data-contact-form data-whatsapp="{{site.whatsappLink}}">
           <div class="field"><label for="n1">Your names</label><input id="n1" name="names" autocomplete="name" required></div>
           <div class="field"><label for="em">Email</label><input id="em" type="email" name="email" autocomplete="email" required></div>
           <div class="field"><label for="fe">Wedding date</label><input id="fe" type="date" name="date"></div>
           <div class="field"><label for="lu">Venue / location</label><input id="lu" name="location" placeholder="e.g. José Ignacio"></div>
           <div class="field full"><label for="co">Where are you based?</label><input id="co" name="country" autocomplete="country-name"></div>
           <div class="field full"><label for="ms">Tell me about you</label><textarea id="ms" name="message"></textarea></div>
-          <div class="full"><button class="btn" type="submit">Send inquiry</button></div>
+          <div class="full"><button class="btn" type="submit">Send via WhatsApp</button></div>
           <p class="form-note full" role="status"></p>
         </form>
       </div>

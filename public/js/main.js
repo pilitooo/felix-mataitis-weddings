@@ -125,10 +125,21 @@
 
   /* ---------- Formulario (placeholder) ---------- */
   const form = $("[data-contact-form]");
+  // Sin servidor: arma el mensaje y lo abre en WhatsApp con el número de Felix.
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
-    $(".form-note", form).textContent = document.documentElement.lang.startsWith("en")
-      ? "Thank you. (Prototype: the form is not connected yet.)"
-      : "Gracias. (Prototipo: el envío todavía no está conectado.)";
+    const en = document.documentElement.lang.startsWith("en");
+    const lines = $$(".field", form)
+      .map((f) => {
+        const input = $("input, select, textarea", f);
+        const label = $("label", f).textContent.trim();
+        return input.value.trim() ? `${label}: ${input.value.trim()}` : "";
+      })
+      .filter(Boolean);
+    const text = (en ? "Hi Felix! Wedding inquiry from the website:\n\n" : "¡Hola Felix! Consulta desde la web:\n\n") + lines.join("\n");
+    window.open(`${form.dataset.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    $(".form-note", form).textContent = en
+      ? "Opening WhatsApp with your message… If it doesn't open, write to the email on the left."
+      : "Abriendo WhatsApp con tu mensaje… Si no se abre, escribime al email de la izquierda.";
   });
 })();
