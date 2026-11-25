@@ -8,19 +8,12 @@
   "header": "hero",
   "priority": 1.0,
   "schema": ["website", "business"],
-  "head": "<link rel=\"preload\" as=\"style\" href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400&display=swap\">"
+  "head": "<link rel=\"preload\" as=\"image\" href=\"/assets/img/hero-sm.webp\" imagesrcset=\"/assets/img/hero-sm.webp 960w, /assets/img/hero.webp 1920w\" imagesizes=\"100vw\" fetchpriority=\"high\">"
 }
 ---
-    <!-- HERO: el video se carga recién después del primer render (ver data-src). -->
+    <!-- HERO: el póster se pinta al instante; el video se carga después del primer render. -->
     <section class="hero">
-      <div class="ph ph--warm hero-media">
-        <div class="drift"></div>
-        <!--
-        <img src="/assets/posters/hero.jpg" alt="" width="1920" height="1080" fetchpriority="high">
-        <video data-src="/assets/videos/hero.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
-        -->
-        <span class="ph-label">Hero · video loop 16:9</span>
-      </div>
+      {{bg:hero:eager}}
       <div class="hero-content">
         <h1 class="eyebrow">Videógrafo de bodas en Uruguay</h1>
         <p class="display">Películas de <em>casamiento</em></p>
@@ -37,13 +30,13 @@
     </section>
 
     <section>
-      <a class="feature reveal" href="/films/sofia-martin-jose-ignacio/">
-        <div class="ph ph--warm"><span class="ph-label">Film destacado · 21:9</span></div>
+      <a class="feature reveal" href="/films/mari-juliot/">
+        {{bg:feature}}
         <span class="play" aria-hidden="true"></span>
         <div class="feature-caption">
           <div>
-            <p class="eyebrow eyebrow--light">Film destacado · José Ignacio</p>
-            <h2>Sofía &amp; Martín</h2>
+            <p class="eyebrow eyebrow--light">Film destacado · Colonia del Sacramento</p>
+            <h2>Mari &amp; Juliot</h2>
           </div>
           <span class="link-arrow">Ver film →</span>
         </div>

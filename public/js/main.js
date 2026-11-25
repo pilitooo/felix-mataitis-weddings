@@ -12,10 +12,14 @@
     addEventListener("scroll", onScroll, { passive: true });
   }
   const toggle = $(".nav-toggle");
-  toggle?.addEventListener("click", () => {
-    const open = document.body.classList.toggle("nav-open");
-    toggle.setAttribute("aria-expanded", open);
-  });
+  const setNav = (open) => {
+    document.body.classList.toggle("nav-open", open);
+    toggle?.setAttribute("aria-expanded", open);
+  };
+  toggle?.addEventListener("click", () => setNav(!document.body.classList.contains("nav-open")));
+  $$(".nav a").forEach((a) => a.addEventListener("click", () => setNav(false)));
+  addEventListener("keydown", (e) => e.key === "Escape" && setNav(false));
+  matchMedia("(min-width: 761px)").addEventListener("change", (e) => e.matches && setNav(false));
 
   /* ---------- Filtros de films ---------- */
   const filters = $("[data-filters]");
@@ -34,7 +38,8 @@
       const v = JSON.parse(player.dataset.video);
       let el;
       if (v.type === "file") {
-        el = Object.assign(document.createElement("video"), { src: v.src, controls: true, autoplay: true, playsInline: true });
+        // Los highlights son mudos: muted garantiza que el autoplay no se bloquee.
+        el = Object.assign(document.createElement("video"), { src: v.src, controls: true, autoplay: true, muted: true, loop: true, playsInline: true });
       } else {
         el = document.createElement("iframe");
         el.allow = "autoplay; fullscreen; picture-in-picture";
@@ -62,7 +67,8 @@
         entries.forEach(({ target: v, isIntersecting }) => {
           if (isIntersecting) {
             if (!v.src) {
-              v.src = v.dataset.src;
+              // Versión liviana en pantallas chicas
+              v.src = (innerWidth < 900 && v.dataset.srcSm) || v.dataset.src;
               v.addEventListener("loadeddata", () => v.classList.add("is-ready"), { once: true });
             }
             v.play().catch(() => {});
@@ -75,6 +81,28 @@
     const start = () => bgVideos.forEach((v) => vio.observe(v));
     // No competir con el primer render: arrancar cuando la página ya cargó.
     document.readyState === "complete" ? start() : addEventListener("load", start, { once: true });
+  }
+
+  /* ---------- Preview de films al pasar el mouse ----------
+     Sólo en dispositivos con mouse; el clip (~300 KB) se descarga recién al primer hover. */
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches && !saveData && !reduceMotion) {
+    $$(".thumb[data-preview]").forEach((thumb) => {
+      let v;
+      thumb.addEventListener("pointerenter", () => {
+        if (!v) {
+          v = Object.assign(document.createElement("video"), { muted: true, loop: true, playsInline: true, className: "preview" });
+          v.setAttribute("aria-hidden", "true");
+          v.src = thumb.dataset.preview;
+          $(".ph", thumb).appendChild(v);
+        }
+        thumb.classList.add("is-previewing");
+        v.play().catch(() => {});
+      });
+      thumb.addEventListener("pointerleave", () => {
+        thumb.classList.remove("is-previewing");
+        v?.pause();
+      });
+    });
   }
 
   /* ---------- Reveal on scroll ---------- */

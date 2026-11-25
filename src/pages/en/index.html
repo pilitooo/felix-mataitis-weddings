@@ -7,14 +7,12 @@
   "description": "Wedding videographer and filmmaker in Uruguay. Cinematic, honest wedding films in Punta del Este, José Ignacio, Montevideo and Colonia. Destination weddings welcome.",
   "header": "hero",
   "priority": 0.9,
-  "schema": ["website", "business"]
+  "schema": ["website", "business"],
+  "head": "<link rel=\"preload\" as=\"image\" href=\"/assets/img/hero-sm.webp\" imagesrcset=\"/assets/img/hero-sm.webp 960w, /assets/img/hero.webp 1920w\" imagesizes=\"100vw\" fetchpriority=\"high\">"
 }
 ---
     <section class="hero">
-      <div class="ph ph--warm hero-media">
-        <div class="drift"></div>
-        <span class="ph-label">Hero · video loop 16:9</span>
-      </div>
+      {{bg:hero:eager}}
       <div class="hero-content">
         <h1 class="eyebrow">Wedding videographer in Uruguay</h1>
         <p class="display">Wedding <em>films</em></p>
@@ -31,13 +29,13 @@
     </section>
 
     <section>
-      <a class="feature reveal" href="/en/films/sofia-martin-jose-ignacio/">
-        <div class="ph ph--warm"><span class="ph-label">Featured film · 21:9</span></div>
+      <a class="feature reveal" href="/en/films/mari-juliot/">
+        {{bg:feature}}
         <span class="play" aria-hidden="true"></span>
         <div class="feature-caption">
           <div>
-            <p class="eyebrow eyebrow--light">Featured film · José Ignacio</p>
-            <h2>Sofía &amp; Martín</h2>
+            <p class="eyebrow eyebrow--light">Featured film · Colonia del Sacramento</p>
+            <h2>Mari &amp; Juliot</h2>
           </div>
           <span class="link-arrow">Watch the film →</span>
         </div>

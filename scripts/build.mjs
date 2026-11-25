@@ -46,14 +46,28 @@ const jsHref = hashed("js/main.js");
 const filmIn = (f, lang) => (lang === "es" ? f : { ...f, ...f.en });
 
 /* ---------- Fragmentos ---------- */
-const media = (f, L, label) =>
+// Imagen responsiva: espera <nombre>.webp (1600px) y <nombre>-sm.webp (800px)
+const sm = (src) => src.replace(/\.webp$/, "-sm.webp");
+const picture = (src, alt, { sizes = "100vw", eager = false, w = 1600, h = 1000 } = {}) =>
+  `<img src="${sm(src)}" srcset="${sm(src)} ${w / 2}w, ${src} ${w}w" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}" ${
+    eager ? 'fetchpriority="high"' : 'loading="lazy"'
+  } decoding="async">`;
+
+const media = (f, L, label, opts = {}) =>
   f.poster
-    ? `<img src="${esc(f.poster)}" alt="${esc(`${f.title}, ${L.filmAlt} ${f.place}`)}" width="1600" height="1000" loading="lazy" decoding="async">`
+    ? picture(f.poster, `${f.title}, ${L.filmAlt} ${f.place}`, { sizes: "(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw", ...opts })
     : `<span class="ph-label">${label}</span>`;
+
+// Fondo con video en loop: póster inmediato + video diferido (ver main.js)
+const BG_SIZE = { feature: [1920, 820] };
+const bg = (name, { eager = false, tone = "" } = {}) => `<div class="ph ${tone ? "ph--" + tone : ""} bg-media">
+  ${picture(`/assets/img/${name}.webp`, "", { eager, w: BG_SIZE[name]?.[0] || 1920, h: BG_SIZE[name]?.[1] || 1080 })}
+  <video data-src="/assets/video/${name}.mp4" data-src-sm="/assets/video/${name}-sm.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+</div>`;
 
 const card = (f, L, h = "h3") => `
 <a class="film-card reveal" href="${L.filmsBase}${f.slug}/" data-category="${f.category}">
-  <div class="thumb"><div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, "Video · 16:10")}</div><span class="play" aria-hidden="true"></span></div>
+  <div class="thumb"${f.preview ? ` data-preview="${f.preview}"` : ""}><div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, "Video · 16:10")}</div><span class="play" aria-hidden="true"></span></div>
   <${h}>${esc(f.title)}</${h}>
   <p>${esc(f.place)}</p>
 </a>`;
@@ -63,6 +77,7 @@ const grid = (list, L, lang, h) =>
 
 const filters = (L) => {
   const used = [...new Set(films.map((f) => f.category))];
+  if (used.length < 2) return ""; // con una sola categoría el filtro no aporta
   return `<div class="filters" data-filters role="group" aria-label="${L.filterLabel}">
   <button type="button" class="is-active" data-filter="all">${L.filterAll}</button>
   ${used.map((c) => `<button type="button" data-filter="${c}">${L.categories[c] || c}</button>`).join("\n  ")}
@@ -71,7 +86,7 @@ const filters = (L) => {
 
 const cta = (L, tone = "cool") => `
 <section class="cta">
-  <div class="ph ph--${tone}"><span class="ph-label">Video loop</span></div>
+  ${bg("cta", { tone })}
   <div class="wrap reveal">
     <p class="eyebrow">${L.ctaEyebrow}</p>
     <h2 class="display">${L.ctaTitle}</h2>
@@ -173,6 +188,10 @@ function render(fm, body) {
       const list = films.filter((f) => terms.some((t) => f.place.includes(t))).slice(0, 3);
       return grid(list.length ? list : films.filter((f) => f.featured), L, lang, "h3");
     })
+    .replace(/\{\{bg:(\w+)(:eager)?\}\}/g, (_, n, e) => bg(n, { eager: !!e }))
+    .replace(/\{\{img:([\w-]+):([^}]*)\}\}/g, (_, n, alt) =>
+      picture(`/assets/img/${n}.webp`, alt, { sizes: "(max-width: 860px) 100vw, 50vw" })
+    )
     .replace(/\{\{filters\}\}/g, () => filters(L))
     .replace(/\{\{cta(?::(\w+))?\}\}/g, (_, t) => cta(L, t))
     .replace(/\{\{breadcrumbs\}\}/g, () => breadcrumbsHtml(trail))
@@ -278,6 +297,7 @@ for (const lang of LANGS) {
         description: f.summary,
         thumbnailUrl: abs(f.poster),
         uploadDate: f.uploadDate,
+        ...(f.duration && { duration: f.duration }),
         inLanguage: L.lang,
         ...(f.video.type === "vimeo" && { embedUrl: `https://player.vimeo.com/video/${f.video.id}` }),
         ...(f.video.type === "youtube" && { embedUrl: `https://www.youtube.com/embed/${f.video.id}` }),
@@ -296,7 +316,7 @@ for (const lang of LANGS) {
 
 <section class="wrap">
   <div class="player" ${f.video ? `data-video='${esc(JSON.stringify(f.video))}'` : ""}>
-    <div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, f.video ? "Film" : L.filmSoon)}</div>
+    <div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, f.video ? "Film" : L.filmSoon, { eager: true, sizes: "(max-width: 1240px) 100vw, 1240px" })}</div>
     <button class="player-btn" type="button" aria-label="${L.play} ${esc(f.title)}"><span class="play" aria-hidden="true"></span></button>
   </div>
 </section>
@@ -335,7 +355,7 @@ for (const lang of LANGS) {
         crumb: f.title,
         parent: ["Films", L.filmsBase],
         ogType: f.video ? "video.other" : "article",
-        ogImage: f.poster || undefined,
+        ogImage: f.poster ? `/assets/og/${f.slug}.jpg` : undefined,
         priority: 0.5,
         jsonld,
       },
