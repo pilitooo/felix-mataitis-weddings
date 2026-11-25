@@ -1,65 +1,47 @@
 name: Deploy
 
-# Cada push a main publica el sitio en Cloudflare Pages.
-# Requiere dos secrets en GitHub (Settings → Secrets and variables → Actions):
-#   CLOUDFLARE_API_TOKEN   – token con permiso "Cloudflare Pages: Edit"
-#   CLOUDFLARE_ACCOUNT_ID  – ID de la cuenta de Cloudflare
-# Mientras no estén cargados, el workflow termina sin error y no publica.
+# Cada push a main genera el sitio y lo publica en GitHub Pages (gratis, repo público).
+# Dominio: felixmataitis.com (archivo public/CNAME + DNS en Namecheap).
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
-  group: deploy
+  group: pages
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    env:
-      CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      PROJECT_NAME: felix-mataitis-weddings
     steps:
       - uses: actions/checkout@v4
-
-      - name: Check secrets
-        id: check
-        run: |
-          if [ -z "$CF_TOKEN" ]; then
-            echo "::warning::Faltan los secrets de Cloudflare; se omite el deploy."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          fi
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # SITE_URL: variable del repo (Settings → Secrets and variables → Actions → Variables).
-      # Cuando tengamos dominio se carga ahí, ej. https://felixmataitis.com
       - name: Build
         env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://felix-mataitis-weddings.pages.dev' }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://felixmataitis.com' }}
         run: node scripts/build.mjs
 
-      - name: Create Pages project (si no existe)
-        if: steps.check.outputs.ready == 'true'
-        uses: cloudflare/wrangler-action@v3
-        continue-on-error: true
+      - uses: actions/upload-pages-artifact@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project create ${{ env.PROJECT_NAME }} --production-branch=main
+          path: dist
 
-      - name: Deploy to Cloudflare Pages
-        if: steps.check.outputs.ready == 'true'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ env.PROJECT_NAME }} --branch=main
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
