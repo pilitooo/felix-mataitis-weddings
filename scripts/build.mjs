@@ -1,12 +1,15 @@
-// Build estático sin dependencias.
+// Build estático sin dependencias, bilingüe (es / en).
 //   node scripts/build.mjs            → genera dist/
-//   SITE_URL=https://dominio.uy node scripts/build.mjs
+//   SITE_URL=https://felixmataitis.com node scripts/build.mjs
 //
-// src/layout.html      plantilla común (head, header, footer)
-// src/pages/*.html     páginas: front matter JSON entre líneas "---" + contenido
-// src/films.json       catálogo de films (genera /films/<slug>/)
-// src/site.json        datos del negocio, menú y links SEO del footer
-// public/              archivos estáticos copiados tal cual
+// src/layout.html        plantilla común (head, header, footer)
+// src/pages/*.html       páginas en español
+// src/pages/en/*.html    páginas en inglés
+//   Front matter JSON entre líneas "---". Campos: path, title, description, crumb,
+//   alt (ruta de la misma página en el otro idioma), header, priority, schema, faq, jsonld, noindex
+// src/films.json         catálogo de films (genera /films/<slug>/ y /en/films/<slug>/)
+// src/site.json          datos del negocio + textos de interfaz por idioma
+// public/                archivos estáticos copiados tal cual
 
 import fs from "node:fs";
 import path from "node:path";
@@ -22,13 +25,14 @@ const read = (p) => fs.readFileSync(path.join(SRC, p), "utf8");
 const site = JSON.parse(read("site.json"));
 const films = JSON.parse(read("films.json"));
 const layout = read("layout.html");
+const LANGS = Object.keys(site.i18n); // ["es", "en"]
 
 const esc = (s = "") =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const clip = (s, n = 158) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n - 1)).replace(/[,.;:]$/, "") + "…");
 const abs = (p) => (/^https?:/.test(p) ? p : SITE_URL + p);
 
-/* ---------- Assets con hash para cache largo ---------- */
+/* ---------- Assets con hash ---------- */
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.cpSync(path.join(ROOT, "public"), OUT, { recursive: true });
 const hashed = (rel) => {
@@ -38,43 +42,45 @@ const hashed = (rel) => {
 const cssHref = hashed("css/styles.css");
 const jsHref = hashed("js/main.js");
 
-/* ---------- Fragmentos ---------- */
-const CATEGORIES = { boda: "Bodas", elopement: "Elopement", preboda: "Preboda", destino: "Destino" };
+/* ---------- Films por idioma ---------- */
+const filmIn = (f, lang) => (lang === "es" ? f : { ...f, ...f.en });
 
-const media = (f, label) =>
+/* ---------- Fragmentos ---------- */
+const media = (f, L, label) =>
   f.poster
-    ? `<img src="${esc(f.poster)}" alt="${esc(`${f.title}, video de boda en ${f.place}`)}" width="1600" height="1000" loading="lazy" decoding="async">`
+    ? `<img src="${esc(f.poster)}" alt="${esc(`${f.title}, ${L.filmAlt} ${f.place}`)}" width="1600" height="1000" loading="lazy" decoding="async">`
     : `<span class="ph-label">${label}</span>`;
 
-const card = (f, h = "h3") => `
-<a class="film-card reveal" href="/films/${f.slug}/" data-category="${f.category}">
-  <div class="thumb"><div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, "Video · 16:10")}</div><span class="play" aria-hidden="true"></span></div>
+const card = (f, L, h = "h3") => `
+<a class="film-card reveal" href="${L.filmsBase}${f.slug}/" data-category="${f.category}">
+  <div class="thumb"><div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, "Video · 16:10")}</div><span class="play" aria-hidden="true"></span></div>
   <${h}>${esc(f.title)}</${h}>
   <p>${esc(f.place)}</p>
 </a>`;
 
-const grid = (list, h) => `<div class="films-grid">${list.map((f) => card(f, h)).join("")}\n</div>`;
+const grid = (list, L, lang, h) =>
+  `<div class="films-grid">${list.map((f) => card(filmIn(f, lang), L, h)).join("")}\n</div>`;
 
-const filters = () => {
+const filters = (L) => {
   const used = [...new Set(films.map((f) => f.category))];
-  return `<div class="filters" data-filters role="group" aria-label="Filtrar films">
-  <button type="button" class="is-active" data-filter="all">Todos</button>
-  ${used.map((c) => `<button type="button" data-filter="${c}">${CATEGORIES[c] || c}</button>`).join("\n  ")}
+  return `<div class="filters" data-filters role="group" aria-label="${L.filterLabel}">
+  <button type="button" class="is-active" data-filter="all">${L.filterAll}</button>
+  ${used.map((c) => `<button type="button" data-filter="${c}">${L.categories[c] || c}</button>`).join("\n  ")}
 </div>`;
 };
 
-const cta = (tone = "cool") => `
+const cta = (L, tone = "cool") => `
 <section class="cta">
-  <div class="ph ph--${tone}"><span class="ph-label">Fondo · video loop</span></div>
+  <div class="ph ph--${tone}"><span class="ph-label">Video loop</span></div>
   <div class="wrap reveal">
-    <p class="eyebrow">Fechas disponibles</p>
-    <h2 class="display">¿Hablamos de su <em>casamiento</em>?</h2>
-    <a class="btn btn--light" href="/contacto/">Consultar fecha</a>
+    <p class="eyebrow">${L.ctaEyebrow}</p>
+    <h2 class="display">${L.ctaTitle}</h2>
+    <a class="btn btn--light" href="${L.contact}">${L.askDate}</a>
   </div>
 </section>`;
 
 const breadcrumbsHtml = (trail) =>
-  `<nav class="crumbs" aria-label="Ruta"><ol>${trail
+  `<nav class="crumbs" aria-label="Breadcrumb"><ol>${trail
     .map(([name, href], i) =>
       i === trail.length - 1 ? `<li aria-current="page">${esc(name)}</li>` : `<li><a href="${href}">${esc(name)}</a></li>`
     )
@@ -87,13 +93,13 @@ const faqHtml = (faq) =>
 
 /* ---------- Schema.org ---------- */
 const businessId = `${SITE_URL}/#negocio`;
-const business = {
+const business = (L) => ({
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "@id": businessId,
   name: site.brand,
   alternateName: site.name,
-  description: site.description,
+  description: L.description,
   url: SITE_URL + "/",
   image: abs(site.defaultOgImage),
   email: site.email,
@@ -103,19 +109,20 @@ const business = {
   areaServed: site.areaServed.map((n) =>
     n === "Uruguay" ? { "@type": "Country", name: n } : { "@type": "City", name: n }
   ),
-  founder: { "@type": "Person", name: site.name, jobTitle: "Videógrafo de bodas" },
-  knowsAbout: ["Video de bodas", "Filmación de casamientos", "Videografía de bodas", "Bodas de destino", "Elopements"],
+  founder: { "@type": "Person", name: site.name, jobTitle: L.jobTitle },
+  knowsAbout: ["Video de bodas", "Wedding videography", "Filmación de casamientos", "Destination weddings", "Elopements"],
+  availableLanguage: ["es", "en"],
   sameAs: [site.instagram],
-};
-const website = {
+});
+const website = (L) => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${SITE_URL}/#web`,
   url: SITE_URL + "/",
   name: site.brand,
-  inLanguage: site.lang,
+  inLanguage: ["es-UY", "en"],
   publisher: { "@id": businessId },
-};
+});
 const breadcrumbLd = (trail) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -133,64 +140,94 @@ const faqLd = (faq) => ({
 const ld = (objs) =>
   objs.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`).join("\n  ");
 
-/* ---------- Render de una página ---------- */
+/* ---------- Render ---------- */
 const pages = [];
 
 function render(fm, body) {
-  const isHome = fm.path === "/";
-  const trail = isHome ? [] : [["Inicio", "/"], ...(fm.parent ? [fm.parent] : []), [fm.crumb || fm.h || fm.title, fm.path]];
-  const canonical = abs(fm.path === "/404" ? "/" : fm.path);
+  const lang = fm.lang || "es";
+  const L = site.i18n[lang];
+  const isHome = fm.path === L.home;
+  const is404 = fm.path === "/404";
+  const trail = isHome ? [] : [[L.homeCrumb, L.home], ...(fm.parent ? [fm.parent] : []), [fm.crumb || fm.title, fm.path]];
+  const canonical = abs(is404 ? "/" : fm.path);
+
+  // hreflang: la página en su idioma + su par en el otro idioma
+  const alts = { [lang]: fm.path };
+  if (fm.alt) alts[lang === "es" ? "en" : "es"] = fm.alt;
+  const hreflang = is404
+    ? ""
+    : Object.entries(alts)
+        .map(([k, p]) => `<link rel="alternate" hreflang="${site.i18n[k].lang}" href="${abs(p)}">`)
+        .concat(`<link rel="alternate" hreflang="x-default" href="${abs(alts.es || fm.path)}">`)
+        .join("\n  ");
+  const otherLang = lang === "es" ? "en" : "es";
+  const switchHref = alts[otherLang] || site.i18n[otherLang].home;
+  const langSwitch = `<a class="lang-switch" href="${switchHref}" hreflang="${site.i18n[otherLang].lang}" lang="${site.i18n[otherLang].lang}" title="${site.i18n[otherLang].langName}">${site.i18n[otherLang].label}</a>`;
 
   let content = body
-    .replace(/\{\{films:featured\}\}/g, () => grid(films.filter((f) => f.featured), "h3"))
-    .replace(/\{\{films:all\}\}/g, () => grid(films, "h2"))
-    .replace(/\{\{films:cat:(\w+)\}\}/g, (_, c) => grid(films.filter((f) => f.category === c).slice(0, 3), "h3"))
+    .replace(/\{\{films:featured\}\}/g, () => grid(films.filter((f) => f.featured), L, lang, "h3"))
+    .replace(/\{\{films:all\}\}/g, () => grid(films, L, lang, "h2"))
+    .replace(/\{\{films:cat:(\w+)\}\}/g, (_, c) => grid(films.filter((f) => f.category === c).slice(0, 3), L, lang, "h3"))
     .replace(/\{\{films:place:([^}]+)\}\}/g, (_, q) => {
       const terms = q.split("|");
       const list = films.filter((f) => terms.some((t) => f.place.includes(t))).slice(0, 3);
-      return grid(list.length ? list : films.filter((f) => f.featured), "h3");
+      return grid(list.length ? list : films.filter((f) => f.featured), L, lang, "h3");
     })
-    .replace(/\{\{filters\}\}/g, filters)
-    .replace(/\{\{cta(?::(\w+))?\}\}/g, (_, t) => cta(t))
+    .replace(/\{\{filters\}\}/g, () => filters(L))
+    .replace(/\{\{cta(?::(\w+))?\}\}/g, (_, t) => cta(L, t))
     .replace(/\{\{breadcrumbs\}\}/g, () => breadcrumbsHtml(trail))
     .replace(/\{\{faq\}\}/g, () => faqHtml(fm.faq || []))
     .replace(/\{\{site\.(\w+)\}\}/g, (_, k) => esc(site[k]));
 
   const schema = [];
-  if (fm.schema?.includes("website")) schema.push(website);
-  if (fm.schema?.includes("business")) schema.push(business);
+  if (fm.schema?.includes("website")) schema.push(website(L));
+  if (fm.schema?.includes("business")) schema.push(business(L));
   if (fm.faq?.length) schema.push(faqLd(fm.faq));
   if (fm.jsonld) schema.push(...JSON.parse(JSON.stringify(fm.jsonld).replaceAll("{{SITE}}", SITE_URL)));
-  if (!isHome && fm.path !== "/404") schema.push(breadcrumbLd(trail));
+  if (!isHome && !is404) schema.push(breadcrumbLd(trail));
 
-  const nav = site.nav
+  const nav = L.nav
     .map((n) => {
-      const active = n.href === "/" ? isHome : fm.path.startsWith(n.href);
+      const active = n.href === L.home ? isHome : fm.path.startsWith(n.href);
       return `        <a href="${n.href}"${active ? ' aria-current="page"' : ""}>${n.label}</a>`;
     })
     .join("\n");
   const linkList = (list) => list.map((n) => `        <a href="${n.href}">${esc(n.label)}</a>`).join("\n");
 
   const vars = {
-    lang: site.lang,
-    locale: site.locale,
+    lang: L.lang,
+    locale: L.locale,
+    localeAlt: site.i18n[otherLang].locale,
     title: esc(fm.title),
     ogTitle: esc(fm.ogTitle || fm.title),
     description: esc(fm.description),
     robots: fm.noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-video-preview:-1",
     canonical,
+    hreflang,
     ogType: fm.ogType || (isHome ? "website" : "article"),
     ogImage: abs(fm.ogImage || site.defaultOgImage),
     siteName: esc(site.name),
     brand: esc(site.brand),
+    brandSmall: L.brandSmall,
+    home: L.home,
+    skip: L.skip,
+    menu: L.menu,
     email: esc(site.email),
     instagram: esc(site.instagram),
     headerClass: fm.header === "hero" ? "" : " site-header--solid",
     head: fm.head || "",
     jsonld: ld(schema),
     nav,
-    footerNav: linkList(site.nav),
-    footerSeo: linkList(site.footerSeo),
+    langSwitch,
+    footerBlurb: L.footerBlurb,
+    footerSections: L.footerSections,
+    footerSeoTitle: L.footerSeoTitle,
+    footerContact: L.footerContact,
+    footerNav: linkList(L.nav),
+    footerSeo: linkList(L.footerSeo),
+    contact: L.contact,
+    askDate: L.askDate,
+    copyright: L.copyright,
     cssHref,
     jsHref,
     year: new Date().getFullYear(),
@@ -198,42 +235,57 @@ function render(fm, body) {
   };
   const html = layout.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in vars ? vars[k] : m));
 
-  const file = fm.path === "/404" ? "404.html" : path.join(fm.path, "index.html");
+  const file = is404 ? "404.html" : path.join(fm.path, "index.html");
   const dest = path.join(OUT, file);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, html);
-  if (!fm.noindex && fm.path !== "/404") pages.push({ loc: abs(fm.path), priority: fm.priority ?? 0.6 });
+  if (!fm.noindex && !is404) pages.push({ loc: abs(fm.path), priority: fm.priority ?? 0.6 });
 }
 
-/* ---------- Páginas de src/pages ---------- */
-for (const name of fs.readdirSync(path.join(SRC, "pages")).filter((n) => n.endsWith(".html")).sort()) {
-  const raw = read(path.join("pages", name));
-  const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  if (!m) throw new Error(`Falta el front matter en ${name}`);
-  render(JSON.parse(m[1]), m[2]);
+/* ---------- Páginas de src/pages (y src/pages/en) ---------- */
+const pageFiles = (dir) =>
+  fs.readdirSync(path.join(SRC, dir), { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory() ? pageFiles(path.join(dir, d.name)) : d.name.endsWith(".html") ? [path.join(dir, d.name)] : []
+  );
+const seenPaths = new Set();
+for (const file of pageFiles("pages").sort()) {
+  const m = read(file).match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  if (!m) throw new Error(`Falta el front matter en ${file}`);
+  const fm = JSON.parse(m[1]);
+  fm.lang ||= file.startsWith(path.join("pages", "en")) ? "en" : "es";
+  if (seenPaths.has(fm.path)) throw new Error(`Ruta duplicada: ${fm.path}`);
+  seenPaths.add(fm.path);
+  render(fm, m[2]);
 }
 
-/* ---------- Una página por film ---------- */
-for (const f of films) {
-  const others = films.filter((x) => x !== f);
-  const related = [...others.filter((x) => x.category === f.category), ...others].filter((x, i, a) => a.indexOf(x) === i).slice(0, 3);
-  const kind = { boda: "Video de boda", elopement: "Elopement", preboda: "Video preboda", destino: "Boda de destino" }[f.category];
-  const jsonld = [];
-  if (f.video && f.poster && f.uploadDate) {
-    jsonld.push({
-      "@context": "https://schema.org",
-      "@type": "VideoObject",
-      name: `${f.title} — ${kind} en ${f.place}`,
-      description: f.summary,
-      thumbnailUrl: abs(f.poster),
-      uploadDate: f.uploadDate,
-      ...(f.video.type === "vimeo" && { embedUrl: `https://player.vimeo.com/video/${f.video.id}` }),
-      ...(f.video.type === "youtube" && { embedUrl: `https://www.youtube.com/embed/${f.video.id}` }),
-      ...(f.video.type === "file" && { contentUrl: abs(f.video.src) }),
-      publisher: { "@id": "{{SITE}}/#negocio" },
-    });
-  }
-  const body = `
+/* ---------- Una página por film y por idioma ---------- */
+for (const lang of LANGS) {
+  const L = site.i18n[lang];
+  for (const raw of films) {
+    const f = filmIn(raw, lang);
+    const others = films.filter((x) => x !== raw);
+    const related = [...others.filter((x) => x.category === raw.category), ...others]
+      .filter((x, i, a) => a.indexOf(x) === i)
+      .slice(0, 3);
+    const kind = L.kinds[f.category];
+    const where = lang === "es" ? "en" : "in";
+    const jsonld = [];
+    if (f.video && f.poster && f.uploadDate) {
+      jsonld.push({
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: `${f.title} — ${kind} ${where} ${f.place}`,
+        description: f.summary,
+        thumbnailUrl: abs(f.poster),
+        uploadDate: f.uploadDate,
+        inLanguage: L.lang,
+        ...(f.video.type === "vimeo" && { embedUrl: `https://player.vimeo.com/video/${f.video.id}` }),
+        ...(f.video.type === "youtube" && { embedUrl: `https://www.youtube.com/embed/${f.video.id}` }),
+        ...(f.video.type === "file" && { contentUrl: abs(f.video.src) }),
+        publisher: { "@id": "{{SITE}}/#negocio" },
+      });
+    }
+    const body = `
 <section class="page-head page-head--film">
   <div class="wrap">
     {{breadcrumbs}}
@@ -244,8 +296,8 @@ for (const f of films) {
 
 <section class="wrap">
   <div class="player" ${f.video ? `data-video='${esc(JSON.stringify(f.video))}'` : ""}>
-    <div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, f.video ? "Film" : "Film · próximamente")}</div>
-    <button class="player-btn" type="button" aria-label="Reproducir el film de ${esc(f.title)}"><span class="play" aria-hidden="true"></span></button>
+    <div class="ph ${f.tone ? "ph--" + f.tone : ""}">${media(f, L, f.video ? "Film" : L.filmSoon)}</div>
+    <button class="player-btn" type="button" aria-label="${L.play} ${esc(f.title)}"><span class="play" aria-hidden="true"></span></button>
   </div>
 </section>
 
@@ -256,40 +308,43 @@ for (const f of films) {
       <p>${esc(f.story)}</p>
     </div>
     <dl class="film-meta reveal">
-      <dt>Lugar</dt><dd>${esc(f.place)}</dd>
-      <dt>Locación</dt><dd>${esc(f.venue)}</dd>
-      <dt>Temporada</dt><dd>${esc(f.season)}</dd>
-      <dt>Tipo</dt><dd>${CATEGORIES[f.category] || f.category}</dd>
+      <dt>${L.meta.place}</dt><dd>${esc(f.place)}</dd>
+      <dt>${L.meta.venue}</dt><dd>${esc(f.venue)}</dd>
+      <dt>${L.meta.season}</dt><dd>${esc(f.season)}</dd>
+      <dt>${L.meta.type}</dt><dd>${L.categories[f.category] || f.category}</dd>
     </dl>
   </div>
 </section>
 
 <section class="section--tight section--deep">
   <div class="wrap">
-    <h2 class="display display--sm center reveal">Más films</h2>
-    ${grid(related, "h3")}
+    <h2 class="display display--sm center reveal section-head">${L.more}</h2>
+    ${grid(related, L, lang, "h3")}
   </div>
 </section>
 {{cta:warm}}`;
-  const tmp = { jsonld };
-  render(
-    {
-      path: `/films/${f.slug}/`,
-      title: ((t) => (t.length + site.name.length + 3 <= 60 ? `${t} | ${site.name}` : t))(`${f.title} · ${kind} en ${f.place}`),
-      ogTitle: `${f.title} — ${kind} en ${f.place}`,
-      description: clip(`${f.summary} Film de ${site.name}, videógrafo de bodas en Uruguay.`),
-      crumb: f.title,
-      parent: ["Films", "/films/"],
-      ogType: f.video ? "video.other" : "article",
-      ogImage: f.poster || undefined,
-      priority: 0.5,
-      ...tmp,
-    },
-    body
-  );
+    const t = `${f.title} · ${kind} ${where} ${f.place}`;
+    render(
+      {
+        lang,
+        path: `${L.filmsBase}${f.slug}/`,
+        alt: `${site.i18n[lang === "es" ? "en" : "es"].filmsBase}${f.slug}/`,
+        title: t.length + site.name.length + 3 <= 60 ? `${t} | ${site.name}` : t,
+        ogTitle: `${f.title} — ${kind} ${where} ${f.place}`,
+        description: clip(`${f.summary} ${L.filmDescSuffix}`),
+        crumb: f.title,
+        parent: ["Films", L.filmsBase],
+        ogType: f.video ? "video.other" : "article",
+        ogImage: f.poster || undefined,
+        priority: 0.5,
+        jsonld,
+      },
+      body
+    );
+  }
 }
 
-/* ---------- sitemap.xml y robots.txt ---------- */
+/* ---------- sitemap.xml (con alternates hreflang) y robots.txt ---------- */
 fs.writeFileSync(
   path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>

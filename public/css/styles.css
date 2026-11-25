@@ -829,3 +829,15 @@ a.step:hover { border-color: var(--accent); }
 /* Video de fondo: aparece con fundido cuando ya tiene el primer frame */
 .ph > video[data-src] { opacity: 0; transition: opacity 1.2s var(--ease); }
 .ph > video.is-ready { opacity: 1; }
+
+/* Selector de idioma */
+.lang-switch {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  padding: 4px 9px !important;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+}
+.lang-switch::after { display: none; }
+.lang-switch:hover { opacity: 1; }
+.footer-grid .lang-switch { align-self: flex-start; margin-top: 6px; }

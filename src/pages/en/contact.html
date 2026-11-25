@@ -1,0 +1,48 @@
+---
+{
+  "path": "/en/contact/",
+  "alt": "/contacto/",
+  "title": "Contact · Check Availability | Felix Mataitis",
+  "description": "Check availability for your wedding film in Uruguay. Send me your date and venue and I'll get back to you within 48 hours.",
+  "crumb": "Contact",
+  "priority": 0.7,
+  "schema": ["business"]
+}
+---
+    <section class="page-head">
+      <div class="wrap center">
+        {{breadcrumbs}}
+        <p class="eyebrow">Contact</p>
+        <h1 class="display">Tell me about your <em>wedding</em></h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap contact">
+        <div class="contact-info reveal">
+          <p class="lead">I take on a limited number of weddings each year so I can give each one the time it deserves.</p>
+          <p>Send me your date and venue and I'll reply within 48 hours with availability and options. Couples from abroad are very welcome.</p>
+          <dl>
+            <dt>Email</dt>
+            <dd><a href="mailto:{{site.email}}">{{site.email}}</a></dd>
+            <dt>WhatsApp</dt>
+            <dd>{{site.whatsapp}}</dd>
+            <dt>Instagram</dt>
+            <dd><a href="{{site.instagram}}" target="_blank" rel="noopener">{{site.instagramHandle}}</a></dd>
+            <dt>Area</dt>
+            <dd>All of Uruguay &amp; destination weddings</dd>
+          </dl>
+        </div>
+
+        <form class="form reveal" data-contact-form>
+          <div class="field"><label for="n1">Your names</label><input id="n1" name="names" autocomplete="name" required></div>
+          <div class="field"><label for="em">Email</label><input id="em" type="email" name="email" autocomplete="email" required></div>
+          <div class="field"><label for="fe">Wedding date</label><input id="fe" type="date" name="date"></div>
+          <div class="field"><label for="lu">Venue / location</label><input id="lu" name="location" placeholder="e.g. José Ignacio"></div>
+          <div class="field full"><label for="co">Where are you based?</label><input id="co" name="country" autocomplete="country-name"></div>
+          <div class="field full"><label for="ms">Tell me about you</label><textarea id="ms" name="message"></textarea></div>
+          <div class="full"><button class="btn" type="submit">Send inquiry</button></div>
+          <p class="form-note full" role="status"></p>
+        </form>
+      </div>
+    </section>

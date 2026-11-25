@@ -12,7 +12,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Un casamiento al atardecer en una chacra de José Ignacio, con la ceremonia a metros del mar y una fiesta que terminó descalzos en el pasto.",
-    "story": "[Texto placeholder] Sofía y Martín querían algo simple: su gente, buena comida y el último sol del día. La ceremonia fue al aire libre, con el viento del este jugando con el velo, y la fiesta siguió bajo una tela de luces hasta la madrugada."
+    "story": "[Texto placeholder] Sofía y Martín querían algo simple: su gente, buena comida y el último sol del día. La ceremonia fue al aire libre, con el viento del este jugando con el velo, y la fiesta siguió bajo una tela de luces hasta la madrugada.",
+    "en": {
+      "place": "José Ignacio, Maldonado",
+      "venue": "Oceanfront estate",
+      "season": "Summer 2026",
+      "summary": "A sunset wedding at an oceanfront estate in José Ignacio, with the ceremony steps from the sea and a party that ended barefoot on the grass.",
+      "story": "[Placeholder] Sofía and Martín wanted something simple: their people, great food and the last light of the day. The ceremony was outdoors, with the east wind playing with the veil, and the party went on under string lights until dawn."
+    }
   },
   {
     "slug": "lucia-tomas-carmelo",
@@ -27,7 +34,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Otoño entre viñedos en Carmelo: una boda íntima, con luz dorada, cena larga y discursos que hicieron llorar a todos.",
-    "story": "[Texto placeholder] Una boda de fin de semana en Carmelo, con invitados que llegaron desde Buenos Aires y Montevideo. Filmamos desde la preparación en la posada hasta el último baile en la bodega."
+    "story": "[Texto placeholder] Una boda de fin de semana en Carmelo, con invitados que llegaron desde Buenos Aires y Montevideo. Filmamos desde la preparación en la posada hasta el último baile en la bodega.",
+    "en": {
+      "place": "Carmelo, Colonia",
+      "venue": "Vineyard winery",
+      "season": "Autumn 2026",
+      "summary": "Autumn among the vineyards of Carmelo: an intimate wedding with golden light, a long dinner and speeches that made everyone cry.",
+      "story": "[Placeholder] A wedding weekend in Carmelo with guests from Buenos Aires and Montevideo. We filmed from getting ready at the inn to the last dance at the winery."
+    }
   },
   {
     "slug": "carla-nico-punta-del-este",
@@ -42,7 +56,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Una boda de destino en La Barra: invitados de cuatro países, una ceremonia bilingüe y una fiesta frente al océano.",
-    "story": "[Texto placeholder] Carla y Nico viven en Madrid y eligieron Uruguay para casarse. Coordinamos todo a distancia y el resultado fue una película luminosa, con mucho mar y mucha familia."
+    "story": "[Texto placeholder] Carla y Nico viven en Madrid y eligieron Uruguay para casarse. Coordinamos todo a distancia y el resultado fue una película luminosa, con mucho mar y mucha familia.",
+    "en": {
+      "place": "Punta del Este, Maldonado",
+      "venue": "House in La Barra",
+      "season": "Summer 2026",
+      "summary": "A destination wedding in La Barra: guests from four countries, a bilingual ceremony and a party facing the Atlantic.",
+      "story": "[Placeholder] Carla and Nico live in Madrid and chose Uruguay to get married. We planned everything remotely, and the result is a bright film full of ocean and family."
+    }
   },
   {
     "slug": "valen-joaquin-garzon",
@@ -56,7 +77,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Un elopement entre olivares y viñedos de Garzón: solo ellos dos, sus votos y el campo de Maldonado.",
-    "story": "[Texto placeholder] Sin invitados ni protocolo. Valen y Joaquín se escaparon un día de primavera y se dijeron sus votos en voz baja, entre los olivos."
+    "story": "[Texto placeholder] Sin invitados ni protocolo. Valen y Joaquín se escaparon un día de primavera y se dijeron sus votos en voz baja, entre los olivos.",
+    "en": {
+      "place": "Pueblo Garzón, Maldonado",
+      "venue": "Winery and olive groves",
+      "season": "Spring 2025",
+      "summary": "An elopement among the olive groves and vineyards of Garzón: just the two of them, their vows and the Uruguayan countryside.",
+      "story": "[Placeholder] No guests, no protocol. Valen and Joaquín ran away on a spring day and said their vows quietly among the olive trees."
+    }
   },
   {
     "slug": "juli-fede-montevideo",
@@ -70,7 +98,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Una preboda caminando por la Ciudad Vieja y la Rambla de Montevideo, con la luz de invierno sobre el Río de la Plata.",
-    "story": "[Texto placeholder] Una tarde de invierno caminando por los lugares donde empezó su historia: un café de Ciudad Vieja, la Rambla y el atardecer en el puerto."
+    "story": "[Texto placeholder] Una tarde de invierno caminando por los lugares donde empezó su historia: un café de Ciudad Vieja, la Rambla y el atardecer en el puerto.",
+    "en": {
+      "place": "Ciudad Vieja, Montevideo",
+      "venue": "Urban engagement session",
+      "season": "Winter 2025",
+      "summary": "An engagement film walking through Montevideo's Old Town and Rambla, with winter light over the Río de la Plata.",
+      "story": "[Placeholder] A winter afternoon walking through the places where their story began: a café in Ciudad Vieja, the Rambla and sunset at the port."
+    }
   },
   {
     "slug": "ana-pablo-colonia",
@@ -84,7 +119,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Calles de piedra, el faro y el río: una boda en el Barrio Histórico de Colonia del Sacramento.",
-    "story": "[Texto placeholder] Ceremonia civil en una casona colonial y fiesta a orillas del río. Una película con textura, tiempo y mucha calma."
+    "story": "[Texto placeholder] Ceremonia civil en una casona colonial y fiesta a orillas del río. Una película con textura, tiempo y mucha calma.",
+    "en": {
+      "place": "Colonia del Sacramento",
+      "venue": "Historic Quarter",
+      "season": "Spring 2025",
+      "summary": "Cobblestone streets, the lighthouse and the river: a wedding in the Historic Quarter of Colonia del Sacramento.",
+      "story": "[Placeholder] A civil ceremony in a colonial house and a party by the river. A film with texture, time and calm."
+    }
   },
   {
     "slug": "mica-santi-canelones",
@@ -98,7 +140,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Una boda de campo en una chacra de Canelones, a media hora de Montevideo, con asado, guitarra y fogón.",
-    "story": "[Texto placeholder] Mesa larga bajo los eucaliptos, un fogón al final de la noche y amigos tocando la guitarra. Muy uruguayo, muy de ellos."
+    "story": "[Texto placeholder] Mesa larga bajo los eucaliptos, un fogón al final de la noche y amigos tocando la guitarra. Muy uruguayo, muy de ellos.",
+    "en": {
+      "place": "Canelones",
+      "venue": "Countryside farm",
+      "season": "Summer 2025",
+      "summary": "A countryside wedding at a farm in Canelones, half an hour from Montevideo, with asado, guitars and a bonfire.",
+      "story": "[Placeholder] A long table under the eucalyptus trees, a bonfire at the end of the night and friends playing guitar. Very Uruguayan, very them."
+    }
   },
   {
     "slug": "flor-agus-rocha",
@@ -112,7 +161,14 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Un elopement en los acantilados de La Pedrera, en Rocha, con viento, mar abierto y una promesa entre dos.",
-    "story": "[Texto placeholder] Rocha en temporada baja: playas vacías, cielo enorme y una pareja que quería casarse sin ruido."
+    "story": "[Texto placeholder] Rocha en temporada baja: playas vacías, cielo enorme y una pareja que quería casarse sin ruido.",
+    "en": {
+      "place": "La Pedrera, Rocha",
+      "venue": "Seaside cliffs",
+      "season": "Autumn 2025",
+      "summary": "An elopement on the cliffs of La Pedrera, Rocha: wind, open sea and a promise between two people.",
+      "story": "[Placeholder] Rocha in the off-season: empty beaches, huge skies and a couple who wanted to get married without noise."
+    }
   },
   {
     "slug": "delfi-ramiro-montevideo",
@@ -126,6 +182,13 @@
     "poster": null,
     "uploadDate": null,
     "summary": "Una boda de noche en Carrasco: ceremonia religiosa, fiesta elegante y una pista que no se vació nunca.",
-    "story": "[Texto placeholder] Iglesia, salón y una banda en vivo. Una boda clásica en Montevideo contada con mirada de cine."
+    "story": "[Texto placeholder] Iglesia, salón y una banda en vivo. Una boda clásica en Montevideo contada con mirada de cine.",
+    "en": {
+      "place": "Carrasco, Montevideo",
+      "venue": "Classic ballroom",
+      "season": "Winter 2025",
+      "summary": "An evening wedding in Carrasco: a church ceremony, an elegant reception and a dance floor that never emptied.",
+      "story": "[Placeholder] Church, ballroom and a live band. A classic Montevideo wedding told with a cinematic eye."
+    }
   }
 ]

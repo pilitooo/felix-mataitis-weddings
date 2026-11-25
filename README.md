@@ -5,10 +5,11 @@ Sitio de Felix Mataitis, videógrafo de bodas en Uruguay.
 ## Estructura
 
 ```
-src/site.json        Datos del negocio, menú y links SEO del footer
+src/site.json        Datos del negocio + textos de interfaz por idioma (es / en)
 src/films.json       Catálogo de films (genera /films/<slug>/ automáticamente)
 src/layout.html      Plantilla común: <head>, metadatos, header y footer
-src/pages/*.html     Una página por archivo (front matter JSON + contenido)
+src/pages/*.html     Páginas en español (front matter JSON + contenido)
+src/pages/en/*.html  Páginas en inglés ("alt" en el front matter = su par en el otro idioma)
 public/              Estáticos: css, js, assets, favicon, _headers, _redirects
 scripts/build.mjs    Build sin dependencias → dist/ (+ sitemap.xml y robots.txt)
 _material/           Videos originales (no se sube a git)
@@ -42,9 +43,15 @@ Se insertan como `<video data-src="..." muted loop playsinline preload="none">`:
 - `sitemap.xml` y `robots.txt` generados en cada build
 - Landings por zona (enlazadas desde el footer): Montevideo, Punta del Este, Colonia/Carmelo, bodegas, bodas de destino
 
+## Idiomas
+
+Español en `/`, inglés en `/en/`. Cada página declara su par con `"alt"` y el build genera
+los `hreflang` recíprocos y el selector ES/EN. Los films se traducen con el bloque `"en"` de `src/films.json`.
+
 ## Deploy
 
-Cada push a `main` corre `.github/workflows/deploy.yml` → Cloudflare Pages (plan gratuito).
+Cada push a `main` corre `.github/workflows/deploy.yml` → **GitHub Pages** (gratis, repo público).
 
-- Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
-- Variable: `SITE_URL` (dominio definitivo, para canonical y sitemap)
+- Dominio: `felixmataitis.com` (archivo `public/CNAME`)
+- DNS en Namecheap: 4 registros A `@` → 185.199.108–111.153 y CNAME `www` → `pilitooo.github.io`
+- Variable opcional `SITE_URL` (por defecto `https://felixmataitis.com`)

@@ -7,8 +7,7 @@
   <meta name="description" content="{{description}}">
   <meta name="robots" content="{{robots}}">
   <link rel="canonical" href="{{canonical}}">
-  <link rel="alternate" hreflang="es-UY" href="{{canonical}}">
-  <link rel="alternate" hreflang="x-default" href="{{canonical}}">
+  {{hreflang}}
   <meta name="theme-color" content="#1c1a17">
   <meta name="author" content="{{siteName}}">
   <meta name="geo.region" content="UY">
@@ -17,6 +16,7 @@
   <meta property="og:type" content="{{ogType}}">
   <meta property="og:site_name" content="{{brand}}">
   <meta property="og:locale" content="{{locale}}">
+  <meta property="og:locale:alternate" content="{{localeAlt}}">
   <meta property="og:title" content="{{ogTitle}}">
   <meta property="og:description" content="{{description}}">
   <meta property="og:url" content="{{canonical}}">
@@ -37,14 +37,15 @@
   {{jsonld}}
 </head>
 <body>
-  <a class="skip" href="#contenido">Saltar al contenido</a>
+  <a class="skip" href="#contenido">{{skip}}</a>
 
   <header class="site-header{{headerClass}}">
     <div class="wrap">
-      <a class="brand" href="/" aria-label="{{siteName}} — inicio">{{siteName}}<small>Wedding Films · Uruguay</small></a>
-      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><span></span></button>
+      <a class="brand" href="{{home}}" aria-label="{{siteName}}">{{siteName}}<small>{{brandSmall}}</small></a>
+      <button class="nav-toggle" aria-label="{{menu}}" aria-expanded="false" aria-controls="nav"><span></span></button>
       <nav class="nav" id="nav" aria-label="Principal">
 {{nav}}
+        {{langSwitch}}
       </nav>
     </div>
   </header>
@@ -56,24 +57,25 @@
   <footer class="site-footer">
     <div class="wrap footer-grid">
       <div>
-        <a class="brand" href="/">{{siteName}}<small>Wedding Films · Uruguay</small></a>
-        <p class="footer-blurb">Videógrafo de bodas en Uruguay. Películas de casamiento en Montevideo, Punta del Este, José Ignacio, Colonia y todo el país.</p>
+        <a class="brand" href="{{home}}">{{siteName}}<small>{{brandSmall}}</small></a>
+        <p class="footer-blurb">{{footerBlurb}}</p>
       </div>
-      <nav aria-label="Secciones">
-        <p class="footer-title">Secciones</p>
+      <nav aria-label="{{footerSections}}">
+        <p class="footer-title">{{footerSections}}</p>
 {{footerNav}}
       </nav>
-      <nav aria-label="Casamientos en Uruguay">
-        <p class="footer-title">Casamientos en Uruguay</p>
+      <nav aria-label="{{footerSeoTitle}}">
+        <p class="footer-title">{{footerSeoTitle}}</p>
 {{footerSeo}}
       </nav>
       <div>
-        <p class="footer-title">Contacto</p>
+        <p class="footer-title">{{footerContact}}</p>
         <a href="mailto:{{email}}">{{email}}</a>
         <a href="{{instagram}}" target="_blank" rel="noopener">Instagram</a>
-        <a href="/contacto/">Consultar fecha</a>
+        <a href="{{contact}}">{{askDate}}</a>
+        {{langSwitch}}
       </div>
-      <p class="copyright">© {{year}} {{siteName}} · Videógrafo de bodas en Uruguay</p>
+      <p class="copyright">© {{year}} {{siteName}} · {{copyright}}</p>
     </div>
   </footer>
 

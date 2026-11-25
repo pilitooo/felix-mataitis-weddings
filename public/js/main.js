@@ -99,6 +99,8 @@
   const form = $("[data-contact-form]");
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
-    $(".form-note", form).textContent = "Gracias. (Prototipo: el envío todavía no está conectado.)";
+    $(".form-note", form).textContent = document.documentElement.lang.startsWith("en")
+      ? "Thank you. (Prototype: the form is not connected yet.)"
+      : "Gracias. (Prototipo: el envío todavía no está conectado.)";
   });
 })();
