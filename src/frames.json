@@ -1,19 +1,22 @@
 {
-  "_doc": "Sector 'Una historia en 12 cuadros'. scripts/encode_media.py exporta cada cuadro (src + segundo t) a /assets/frames/. Los textos van por idioma.",
-  "film": "maru-adrian",
-  "sources": { "maru": "Maru y Adrian CORTO.mp4", "maruv": "Maru y Adrian EN VIVO FINAL.mp4" },
+  "_doc": "Rollo 'La historia, cuadro a cuadro'. Cada cuadro sale de una boda distinta (src = clave de scripts/media.json → sources, t = segundo). scripts/encode_media.py los exporta a /assets/frames/NN.webp y NN-sm.webp.",
   "items": [
-    { "src": "maruv", "t": 3.85,  "es": "Los detalles",      "en": "The details" },
-    { "src": "maruv", "t": 11.56, "es": "La espera",         "en": "The wait" },
-    { "src": "maruv", "t": 34.7,  "es": "Ella",              "en": "Her" },
-    { "src": "maruv", "t": 19.26, "es": "La llegada",        "en": "The arrival" },
-    { "src": "maruv", "t": 23.1,  "es": "Cuando la vio",     "en": "When he saw her" },
-    { "src": "maruv", "t": 61.2,  "es": "El sí",             "en": "I do" },
-    { "src": "maruv", "t": 100.4, "es": "El beso",           "en": "The kiss" },
-    { "src": "maruv", "t": 27.0,  "es": "La salida",         "en": "The exit" },
-    { "src": "maruv", "t": 42.4,  "es": "El camino",         "en": "The road" },
-    { "src": "maruv", "t": 46.2,  "es": "La luz de la tarde", "en": "Afternoon light" },
-    { "src": "maruv", "t": 69.3,  "es": "La fiesta",         "en": "The party" },
-    { "src": "maru",  "t": 99.5,  "es": "Para siempre",      "en": "Forever" }
+    { "src": "maruv", "t": 3.85,  "film": "maru-adrian", "es": "Los detalles",     "en": "The details" },
+    { "src": "vd",    "t": 84.6,  "film": "vale-diego",  "es": "Ella",             "en": "Her" },
+    { "src": "maruv", "t": 11.56, "film": "maru-adrian", "es": "La espera",        "en": "The wait" },
+    { "src": "maruv", "t": 23.1,  "film": "maru-adrian", "es": "Cuando la vio",    "en": "When he saw her" },
+    { "src": "maruv", "t": 61.2,  "film": "maru-adrian", "es": "El sí",            "en": "I do" },
+    { "src": "agus",  "t": 9.4,   "film": "agus-naomi",  "es": "La emoción",       "en": "The joy" },
+    { "src": "maruv", "t": 100.4, "film": "maru-adrian", "es": "El beso",          "en": "The kiss" },
+    { "src": "maruv", "t": 27.0,  "film": "maru-adrian", "es": "La salida",        "en": "The exit" },
+    { "src": "maruv", "t": 42.4,  "film": "maru-adrian", "es": "El camino",        "en": "The road" },
+    { "src": "juli",  "t": 1.9,   "film": "juli-santi",  "es": "La alegría",       "en": "Pure joy" },
+    { "src": "mari",  "t": 33.8,  "film": "mari-juliot", "es": "El lugar",         "en": "The place" },
+    { "src": "caro",  "t": 218.3, "film": "caro-alex",   "es": "La luna",          "en": "The moon" },
+    { "src": "juan",  "t": 65.3,  "film": "juan-sofi",   "es": "La ciudad",        "en": "The city" },
+    { "src": "vic",   "t": 17.0,  "film": "vic-juan",    "es": "Los amigos",       "en": "The friends" },
+    { "src": "maruv", "t": 69.3,  "film": "maru-adrian", "es": "La fiesta",        "en": "The party" },
+    { "src": "cami",  "t": 95.0,  "film": "cami-ramiro", "es": "Los pétalos",      "en": "The petals" },
+    { "src": "caro",  "t": 228.0, "film": "caro-alex",   "es": "Para siempre",     "en": "Forever" }
   ]
 }

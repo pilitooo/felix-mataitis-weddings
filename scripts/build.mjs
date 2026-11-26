@@ -110,43 +110,46 @@ const breadcrumbsHtml = (trail) =>
     )
     .join("")}</ol></nav>`;
 
-/* ---------- Sector interactivo: una historia en 12 cuadros ---------- */
+/* ---------- Rollo de película: la historia, cuadro a cuadro ---------- */
 const FRAMES = JSON.parse(read("frames.json"));
 const FRAMES_TXT = {
-  es: { eyebrow: "Fotogramas", title: "Una <em>historia</em> en 12 cuadros", lead: "Deslizá sobre la imagen para recorrer el día de Maru &amp; Adrian, de los detalles al último abrazo.", hint: "Deslizá", label: "Recorrer la historia cuadro por cuadro", link: "Ver el video de Maru &amp; Adrian →" },
-  en: { eyebrow: "Frames", title: "A <em>story</em> in 12 frames", lead: "Slide across the image to walk through Maru &amp; Adrian's day, from the details to the last embrace.", hint: "Slide", label: "Walk through the story frame by frame", link: "Watch Maru &amp; Adrian's film →" },
+  es: { eyebrow: "Fotogramas", title: "La <em>historia</em>, cuadro a cuadro", lead: "Deslizá el rollo: momentos de distintas bodas que, juntos, cuentan un mismo día.", hint: "Deslizá el rollo", prev: "Cuadros anteriores", next: "Cuadros siguientes", label: "Rollo de fotogramas" },
+  en: { eyebrow: "Frames", title: "The <em>story</em>, frame by frame", lead: "Slide the reel: moments from different weddings that, together, tell a single day.", hint: "Slide the reel", prev: "Previous frames", next: "Next frames", label: "Film reel of frames" },
 };
+const filmTitle = Object.fromEntries(films.map((f) => [f.slug, f.title]));
 const framesHtml = (lang) => {
   const T = FRAMES_TXT[lang];
   const L = site.i18n[lang];
-  const base = (i) => `/assets/frames/${FRAMES.film}-${String(i + 1).padStart(2, "0")}`;
-  const items = FRAMES.items.map((it, i) => ({ src: `${base(i)}.webp`, sm: `${base(i)}-sm.webp`, title: it[lang] }));
-  const first = items[0];
+  const frames = FRAMES.items
+    .map((it, i) => {
+      const n = String(i + 1).padStart(2, "0");
+      const src = `/assets/frames/${n}.webp`;
+      const sm = `/assets/frames/${n}-sm.webp`;
+      const couple = filmTitle[it.film] || "";
+      return `<li class="reel-frame">
+          <p class="reel-label"><span class="reel-num">${n}</span><span class="reel-title">${esc(it[lang])}</span><span class="reel-couple">${esc(couple)}</span></p>
+          <a class="reel-shot" href="${L.filmsBase}${it.film}/" draggable="false"><img src="${sm}" srcset="${sm} 560w, ${src} 960w" sizes="(max-width: 700px) 64vw, 420px" alt="${esc(`${it[lang]} — ${couple}`)}" width="960" height="540" loading="lazy" decoding="async" draggable="false"></a>
+        </li>`;
+    })
+    .join("\n        ");
   return `
-<section class="section frames-section">
-  <div class="wrap">
-    <div class="center reveal section-head">
-      <p class="eyebrow">${T.eyebrow}</p>
-      <h2 class="display">${T.title}</h2>
-      <p class="lead">${T.lead}</p>
+<section class="section reel-section">
+  <div class="wrap center reveal section-head">
+    <p class="eyebrow">${T.eyebrow}</p>
+    <h2 class="display">${T.title}</h2>
+    <p class="lead">${T.lead}</p>
+  </div>
+  <div class="reel reveal" data-reel>
+    <div class="reel-track" tabindex="0" role="region" aria-label="${T.label}">
+      <ul class="reel-frames">
+        ${frames}
+      </ul>
     </div>
-    <div class="frames reveal" data-frames='${esc(JSON.stringify(items))}'>
-      <div class="frames-viewer" tabindex="0" role="slider" aria-label="${T.label}" aria-valuemin="1" aria-valuemax="${items.length}" aria-valuenow="1" aria-valuetext="${esc(first.title)}">
-        <img class="frames-img" src="${first.sm}" srcset="${first.sm} 800w, ${first.src} 1600w" sizes="(max-width: 1240px) 100vw, 1240px" alt="${esc(first.title)}" width="1600" height="900" loading="lazy" decoding="async">
-        <div class="frames-caption"><span class="frames-num">01</span><span class="frames-title">${esc(first.title)}</span></div>
-        <div class="frames-hint" aria-hidden="true"><span>←</span> ${T.hint} <span>→</span></div>
-        <div class="frames-progress" aria-hidden="true"><span></span></div>
-      </div>
-      <ol class="frames-strip">
-        ${items
-          .map(
-            (it, i) =>
-              `<li><button type="button" data-i="${i}" aria-label="${String(i + 1).padStart(2, "0")} · ${esc(it.title)}"${i === 0 ? ' aria-current="true"' : ""}><img src="${base(i)}-t.webp" alt="" width="240" height="135" loading="lazy" decoding="async"></button></li>`
-          )
-          .join("\n        ")}
-      </ol>
+    <div class="reel-controls">
+      <button type="button" class="reel-btn" data-dir="-1" aria-label="${T.prev}">←</button>
+      <span class="reel-hint">${T.hint}</span>
+      <button type="button" class="reel-btn" data-dir="1" aria-label="${T.next}">→</button>
     </div>
-    <p class="center section-foot"><a class="link-arrow" href="${L.filmsBase}${FRAMES.film}/">${T.link}</a></p>
   </div>
 </section>`;
 };

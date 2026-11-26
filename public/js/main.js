@@ -112,111 +112,112 @@
     });
   }
 
-  /* ---------- Una historia en 12 cuadros ----------
-     Mouse: la posición horizontal elige el cuadro (como pasar una tira de película).
-     Táctil: arrastrar en horizontal. Teclado: flechas. Miniaturas: clic.
-     Si nadie toca nada, avanza solo mientras está en pantalla. */
-  $$("[data-frames]").forEach((root) => {
-    const items = JSON.parse(root.dataset.frames);
-    const n = items.length;
-    const viewer = $(".frames-viewer", root);
-    const img = $(".frames-img", viewer);
-    const num = $(".frames-num", viewer);
-    const title = $(".frames-title", viewer);
-    const bar = $(".frames-progress span", viewer);
-    const thumbs = $$(".frames-strip button", root);
-    const strip = $(".frames-strip", root);
-    let current = 0;
-    let touched = false;
-    let timer = null;
-    let loaded = false;
-
-    // Versión liviana o grande según el ancho real del visor
-    const pick = (it) => (viewer.clientWidth * devicePixelRatio > 900 ? it.src : it.sm);
-
-    const preload = () => {
-      if (loaded) return;
-      loaded = true;
-      img.removeAttribute("srcset");
-      items.forEach((it) => { const im = new Image(); im.src = pick(it); });
-    };
-
-    const show = (i) => {
-      i = Math.max(0, Math.min(n - 1, i));
-      if (i === current && img.getAttribute("src") === pick(items[i])) return;
-      current = i;
-      img.src = pick(items[i]);
-      img.alt = items[i].title;
-      num.textContent = String(i + 1).padStart(2, "0");
-      title.textContent = items[i].title;
-      bar.style.width = `${((i + 1) / n) * 100}%`;
-      viewer.setAttribute("aria-valuenow", i + 1);
-      viewer.setAttribute("aria-valuetext", items[i].title);
-      thumbs.forEach((b, k) => b.toggleAttribute("aria-current", k === i));
-      thumbs[i].setAttribute("aria-current", "true");
-      // Mantener la miniatura activa visible en la tira (mobile)
-      const t = thumbs[i];
-      if (strip.scrollWidth > strip.clientWidth) strip.scrollTo({ left: t.offsetLeft - strip.clientWidth / 2 + t.offsetWidth / 2, behavior: "smooth" });
-    };
-
-    const interact = () => {
-      if (touched) return;
-      touched = true;
-      root.classList.add("is-touched");
-      clearInterval(timer);
-    };
-
-    const fromX = (clientX) => {
-      const r = viewer.getBoundingClientRect();
-      return Math.floor(((clientX - r.left) / r.width) * n);
-    };
-
-    // Mouse / lápiz: con sólo pasar por encima
-    viewer.addEventListener("pointermove", (e) => {
-      if (e.pointerType === "touch") return;
-      interact();
-      show(fromX(e.clientX));
+  /* ---------- Rollo de película ----------
+     Rollo infinito (los cuadros se duplican una vez). Avanza solo y lento mientras
+     está en pantalla; se pausa con el mouse encima; se arrastra con inercia;
+     en celular usa el deslizamiento nativo. Flechas y botones avanzan un cuadro. */
+  $$("[data-reel]").forEach((root) => {
+    const track = $(".reel-track", root);
+    const list = $(".reel-frames", root);
+    [...list.children].forEach((li) => {
+      const c = li.cloneNode(true);
+      c.setAttribute("aria-hidden", "true");
+      $$("a", c).forEach((a) => (a.tabIndex = -1));
+      list.appendChild(c);
     });
 
-    // Táctil: arrastre horizontal
-    let dragStartX = null, dragStartI = 0;
-    viewer.addEventListener("pointerdown", (e) => {
-      if (e.pointerType !== "touch") return;
-      interact();
-      dragStartX = e.clientX;
-      dragStartI = current;
-    });
-    viewer.addEventListener("pointermove", (e) => {
-      if (e.pointerType !== "touch" || dragStartX === null) return;
-      const step = viewer.clientWidth / n;
-      show(dragStartI + Math.round((e.clientX - dragStartX) / step));
-    });
-    ["pointerup", "pointercancel"].forEach((ev) => viewer.addEventListener(ev, () => (dragStartX = null)));
+    const half = () => list.scrollWidth / 2;
+    const frameW = () => list.children[0].getBoundingClientRect().width + 10;
+    let pos = 1;
+    const setPos = (p) => {
+      const h = half();
+      if (p >= h) p -= h;
+      if (p < 1) p += h;
+      pos = p;
+      track.scrollLeft = p;
+    };
 
-    viewer.addEventListener("keydown", (e) => {
-      const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-      if (k) { e.preventDefault(); interact(); show(current + k); }
-      if (e.key === "Home") { e.preventDefault(); interact(); show(0); }
-      if (e.key === "End") { e.preventDefault(); interact(); show(n - 1); }
+    // Arranca con el cuadro 01 entero y el último asomando a la izquierda
+    requestAnimationFrame(() => setPos(half() - track.clientWidth * 0.08));
+
+    let visible = false, hovering = false, dragging = false;
+    let vel = 0, resumeAt = 0, anim = null, last = performance.now();
+    const SPEED = 0.6; // px por cuadro de animación (~36 px/s)
+    const rest = () => (resumeAt = performance.now() + 2500);
+
+    const tick = (now) => {
+      const dt = Math.min(50, now - last);
+      last = now;
+      if (visible && !dragging) {
+        if (anim) {
+          const k = Math.min(1, (now - anim.start) / anim.dur);
+          const e = 1 - Math.pow(1 - k, 3);
+          setPos(anim.from + (anim.to - anim.from) * e);
+          if (k === 1) anim = null;
+        } else if (Math.abs(vel) > 0.02) {
+          setPos(pos + vel * dt);
+          vel *= Math.pow(0.95, dt / 16);
+        } else if (!reduceMotion && !hovering && now > resumeAt) {
+          setPos(pos + (SPEED * dt) / 16);
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    // Scroll del usuario (trackpad, dedo): sincronizar y pausar el avance
+    track.addEventListener("scroll", () => {
+      if (Math.abs(track.scrollLeft - pos) > 2) {
+        pos = track.scrollLeft;
+        if (pos >= half() || pos < 1) setPos(pos);
+        anim = null;
+        vel = 0;
+        rest();
+      }
+    }, { passive: true });
+
+    // Mouse: pausa al pasar por encima y arrastre con inercia
+    let startX = 0, startPos = 0, lastX = 0, lastT = 0, moved = 0;
+    track.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") hovering = true; });
+    track.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") { hovering = false; rest(); } });
+    track.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      dragging = true; moved = 0; anim = null; vel = 0;
+      startX = lastX = e.clientX; startPos = pos; lastT = performance.now();
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const now = performance.now();
+      moved = Math.max(moved, Math.abs(e.clientX - startX));
+      if (moved > 4) track.classList.add("is-dragging");
+      setPos(startPos - (e.clientX - startX));
+      vel = -(e.clientX - lastX) / Math.max(1, now - lastT);
+      lastX = e.clientX; lastT = now;
+    });
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      rest();
+      setTimeout(() => track.classList.toggle("is-dragging", false), 0);
+    };
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+    // Si fue un arrastre, no abrir el film al soltar
+    track.addEventListener("click", (e) => { if (moved > 4) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    // Botones y teclado: un cuadro por vez
+    const step = (dir) => { vel = 0; anim = { from: pos, to: pos + dir * frameW(), start: performance.now(), dur: 650 }; rest(); };
+    $$(".reel-btn", root).forEach((b) => b.addEventListener("click", () => step(+b.dataset.dir)));
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
     });
 
-    thumbs.forEach((b) => b.addEventListener("click", () => { interact(); show(+b.dataset.i); }));
-
-    // Precarga al acercarse y avance automático mientras está en pantalla
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            preload();
-            if (!touched && !reduceMotion && !timer) timer = setInterval(() => show((current + 1) % n), 1900);
-          } else if (timer) {
-            clearInterval(timer);
-            timer = null;
-          }
-        }),
-      { rootMargin: "300px 0px" }
-    );
-    io.observe(viewer);
+    new IntersectionObserver((en) => en.forEach((x) => {
+      visible = x.isIntersecting;
+      last = performance.now();
+    }), { rootMargin: "100px 0px" }).observe(track);
   });
 
   /* ---------- Reveal on scroll ---------- */
