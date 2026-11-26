@@ -5,9 +5,9 @@
   python3 scripts/encode_media.py hero cami-ramiro   # sólo algunos
 
 Salida en public/assets/:
-  video/<nombre>.mp4 (+ -sm.mp4)    loops de fondo, H.264 sin audio, faststart
+  video/<nombre>.mp4 (+ -sm.mp4)    loops de fondo (-sm = versión vertical para celular)
   films/<slug>.mp4                  highlight mudo de cada boda (1080p)
-  films/<slug>-preview.mp4          loop corto 640px para el hover de las tarjetas
+  films/<slug>-preview.mp4          loop corto 960px para el hover de las tarjetas
   img/<nombre>.webp (+ -sm.webp)    pósters y fotos
 
 Todo sin audio y sin metadatos (se descartan GPS/fechas de cámara).
@@ -22,7 +22,10 @@ EDL = json.loads((ROOT / "scripts" / "media.json").read_text())
 SRC = {k: str(MAT / v) for k, v in EDL["sources"].items()}
 only = set(sys.argv[1:])
 
-H264 = ["-c:v", "libx264", "-preset", "slow", "-profile:v", "high", "-pix_fmt", "yuv420p",
+# preset slower + tune film: mejor reparto de bits en material con grano y cortes rápidos.
+# aq-mode 3 cuida las zonas oscuras (fiestas de noche), que eran las que más se pixelaban.
+H264 = ["-c:v", "libx264", "-preset", "slower", "-tune", "film", "-profile:v", "high", "-pix_fmt", "yuv420p",
+        "-x264-params", "aq-mode=3:aq-strength=0.9",
         "-r", "25", "-g", "50", "-movflags", "+faststart", "-an", "-map_metadata", "-1"]
 
 
@@ -78,14 +81,16 @@ for name, L in EDL["loops"].items():
         continue
     print(name)
     w, h = L["size"]
-    # Fondos: denoise suave (van bajo un overlay oscuro) + techo de bitrate.
-    dn = "hqdn3d=2:1.5:6:5"
-    edit(L["segments"], f"{cover(w, h)},{dn}", OUT / "video" / f"{name}.mp4", L["crf"], maxrate=L.get("kbps", 2200))
-    sw, sh = L["small"]
-    edit(L["segments"], f"{cover(sw, sh)},{dn}", OUT / "video" / f"{name}-sm.mp4", L["crf"] + 1, maxrate=L.get("kbps_sm", 900))
+    # Denoise muy suave: sólo saca el ruido fino que se come los bits, sin lavar la imagen.
+    dn = "hqdn3d=1:1:3:3"
+    edit(L["segments"], f"{cover(w, h)},{dn}", OUT / "video" / f"{name}.mp4", L["crf"], maxrate=L.get("kbps", 4500))
+    # Celular: versión con el formato de la pantalla (vertical), recortada del original.
+    # Antes era horizontal y el navegador estiraba una franja angosta → pixelado.
+    sw, sh = L["mobile"]
+    edit(L["segments"], f"{cover(sw, sh)},{dn}", OUT / "video" / f"{name}-sm.mp4", L["crf"] + 1, maxrate=L.get("kbps_sm", 2000))
     s0 = L["segments"][0]
-    still(SRC[s0[0]], s0[1] + 0.4, cover(w, h), OUT / "img" / f"{name}.webp", 78)
-    still(SRC[s0[0]], s0[1] + 0.4, cover(sw, sh), OUT / "img" / f"{name}-sm.webp", 75)
+    still(SRC[s0[0]], s0[1] + 0.4, cover(w, h), OUT / "img" / f"{name}.webp", 82)
+    still(SRC[s0[0]], s0[1] + 0.4, cover(sw, sh), OUT / "img" / f"{name}-sm.webp", 80)
 
 # Films: highlight mudo + preview + póster
 for slug, F in EDL["films"].items():
@@ -93,10 +98,11 @@ for slug, F in EDL["films"].items():
         continue
     print(slug)
     src = F["src"]
-    # Highlight: conserva el grano; techo de 3,5 Mbps (sólo se descarga al tocar play).
-    edit([[src, a, b] for a, b in F["segments"]], fit_width(1920), OUT / "films" / f"{slug}.mp4", 23, fade=0.4, maxrate=3500)
+    # Highlight: conserva el grano; hasta 8 Mbps (sólo se descarga al tocar play).
+    edit([[src, a, b] for a, b in F["segments"]], fit_width(1920), OUT / "films" / f"{slug}.mp4", 20, fade=0.4, maxrate=8000)
     a, b = F["preview"]
-    edit([[src, a, b]], f"{cover(640, 400)},hqdn3d=2:1.5:6:5", OUT / "films" / f"{slug}-preview.mp4", 28, maxrate=700)
+    # Preview del hover: 960 px para pantallas retina.
+    edit([[src, a, b]], f"{cover(960, 600)},hqdn3d=1:1:3:3", OUT / "films" / f"{slug}-preview.mp4", 23, maxrate=1800)
     still(SRC[src], F["poster"], cover(1600, 1000), OUT / "img" / f"{slug}.webp", 80)
     still(SRC[src], F["poster"], cover(800, 500), OUT / "img" / f"{slug}-sm.webp", 78)
     # Open Graph en JPG (WhatsApp/Facebook no siempre aceptan WebP)

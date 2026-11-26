@@ -908,3 +908,13 @@ a.step:hover { border-color: var(--accent); }
 /* Instrument Serif tiene un solo peso: los títulos usan el regular */
 .display, .brand, .film-card :is(h2, h3), .feature-caption h2, .step h3,
 .quote blockquote, .lead, .faq summary, .contact-info dd, .film-meta dd { font-weight: 400; }
+
+/* Fondos con <picture> (vertical en celular, horizontal en escritorio) */
+.bg-media picture,
+.bg-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

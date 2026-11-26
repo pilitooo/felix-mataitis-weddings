@@ -59,11 +59,20 @@ const media = (f, L, label, opts = {}) =>
     : `<span class="ph-label">${label}</span>`;
 
 // Fondo con video en loop: póster inmediato + video diferido (ver main.js)
+// En pantallas < 900 px se usa la versión vertical (-sm), igual que el video en main.js.
 const BG_SIZE = { feature: [1920, 820] };
-const bg = (name, { eager = false, tone = "" } = {}) => `<div class="ph ${tone ? "ph--" + tone : ""} bg-media">
-  ${picture(`/assets/img/${name}.webp`, "", { eager, w: BG_SIZE[name]?.[0] || 1920, h: BG_SIZE[name]?.[1] || 1080 })}
+const BG_MOBILE = { hero: [720, 1280], cta: [720, 1280], feature: [720, 900] };
+const bg = (name, { eager = false, tone = "" } = {}) => {
+  const [w, h] = BG_SIZE[name] || [1920, 1080];
+  const [mw, mh] = BG_MOBILE[name] || [w / 2, h / 2];
+  return `<div class="ph ${tone ? "ph--" + tone : ""} bg-media">
+  <picture>
+    <source media="(max-width: 899px)" srcset="/assets/img/${name}-sm.webp" width="${mw}" height="${mh}">
+    <img src="/assets/img/${name}.webp" alt="" width="${w}" height="${h}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
+  </picture>
   <video data-src="/assets/video/${name}.mp4" data-src-sm="/assets/video/${name}-sm.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
 </div>`;
+};
 
 const card = (f, L, h = "h3") => `
 <a class="film-card reveal" href="${L.filmsBase}${f.slug}/" data-category="${f.category}">

@@ -65,11 +65,18 @@
     const vio = new IntersectionObserver(
       (entries) =>
         entries.forEach(({ target: v, isIntersecting }) => {
+          v._onScreen = isIntersecting;
           if (isIntersecting) {
             if (!v.src) {
-              // Versión liviana en pantallas chicas
-              v.src = (innerWidth < 900 && v.dataset.srcSm) || v.dataset.src;
-              v.addEventListener("loadeddata", () => v.classList.add("is-ready"), { once: true });
+              // Pantallas < 900 px: versión vertical (mismo corte que el <picture> del build)
+              // autoplay nativo (muted + playsinline): el navegador lo arranca apenas tiene datos.
+              v.autoplay = true;
+              v.src = (matchMedia("(max-width: 899px)").matches && v.dataset.srcSm) || v.dataset.src;
+              // En celulares play() falla si se pide antes de que haya datos: reintentar al cargar.
+              v.addEventListener("loadeddata", () => {
+                v.classList.add("is-ready");
+                if (v._onScreen) v.play().catch(() => {});
+              }, { once: true });
             }
             v.play().catch(() => {});
           } else if (v.src) {
