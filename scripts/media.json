@@ -252,6 +252,16 @@
     "novia-arco": "Captura 2026-11-07 012029_1.12.1.POST.jpg",
     "novia-jardin": "Captura 2026-11-07 012029_1.14.1.jpg",
     "novia-lavanda": "Captura 2026-11-07 012029_1.20.1.POST.jpg",
-    "salida-bn": "Captura 2026-11-07 012029_1.25.1.POST.jpg"
+    "salida-bn": "Captura 2026-11-07 012029_1.25.1.POST.jpg",
+    "felix": {
+      "file": "BODA 0001-8.jpg",
+      "crop": "1092:1365:560:0",
+      "width": 1200
+    },
+    "salida-bn-vertical": {
+      "file": "Captura 2026-11-07 012029_1.25.1.POST.jpg",
+      "crop": "1620:2160:1200:0",
+      "width": 900
+    }
   }
 }

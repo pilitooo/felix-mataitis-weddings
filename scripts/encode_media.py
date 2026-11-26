@@ -106,9 +106,14 @@ for slug, F in EDL["films"].items():
     print(f"  {og.relative_to(ROOT)}  {og.stat().st_size / 1e3:.0f} KB")
 
 # Fotos (capturas)
-for name, file in EDL["stills"].items():
+for name, spec in EDL["stills"].items():
     if not want(name) and not want("stills"):
         continue
     print(name)
-    still(str(MAT / file), None, "scale='min(1600,iw)':-2:flags=lanczos", OUT / "img" / f"{name}.webp", 80)
-    still(str(MAT / file), None, "scale=800:-2:flags=lanczos", OUT / "img" / f"{name}-sm.webp", 78)
+    # spec: "archivo.jpg" o {"file": ..., "crop": "w:h:x:y", "width": 1200}
+    if isinstance(spec, str):
+        spec = {"file": spec}
+    pre = f"crop={spec['crop']}," if "crop" in spec else ""
+    w = spec.get("width", 1600)
+    still(str(MAT / spec["file"]), None, f"{pre}scale='min({w},iw)':-2:flags=lanczos", OUT / "img" / f"{name}.webp", 82)
+    still(str(MAT / spec["file"]), None, f"{pre}scale={w // 2}:-2:flags=lanczos", OUT / "img" / f"{name}-sm.webp", 80)

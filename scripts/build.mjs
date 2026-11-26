@@ -124,7 +124,7 @@ const business = (L) => ({
   areaServed: site.areaServed.map((n) =>
     n === "Uruguay" ? { "@type": "Country", name: n } : { "@type": "City", name: n }
   ),
-  founder: { "@type": "Person", name: site.name, jobTitle: L.jobTitle },
+  founder: { "@type": "Person", name: site.name, jobTitle: L.jobTitle, image: abs("/assets/img/felix.webp"), sameAs: [site.instagram] },
   knowsAbout: ["Video de bodas", "Wedding videography", "Filmación de casamientos", "Destination weddings", "Elopements"],
   availableLanguage: ["es", "en"],
   sameAs: [site.instagram],
@@ -189,8 +189,12 @@ function render(fm, body) {
       return grid(list.length ? list : films.filter((f) => f.featured), L, lang, "h3");
     })
     .replace(/\{\{bg:(\w+)(:eager)?\}\}/g, (_, n, e) => bg(n, { eager: !!e }))
-    .replace(/\{\{img:([\w-]+):([^}]*)\}\}/g, (_, n, alt) =>
-      picture(`/assets/img/${n}.webp`, alt, { sizes: "(max-width: 860px) 100vw, 50vw" })
+    // {{img:nombre:texto alternativo}} o {{img:nombre:texto|ancho:alto}}
+    .replace(/\{\{img:([\w-]+):([^}|]*)(?:\|(\d+):(\d+))?\}\}/g, (_, n, alt, w, h) =>
+      picture(`/assets/img/${n}.webp`, alt, {
+        sizes: "(max-width: 860px) 100vw, 50vw",
+        ...(w && { w: +w, h: +h }),
+      })
     )
     .replace(/\{\{filters\}\}/g, () => filters(L))
     .replace(/\{\{cta(?::(\w+))?\}\}/g, (_, t) => cta(L, t))
