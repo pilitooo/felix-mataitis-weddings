@@ -1,5 +1,59 @@
 [
   {
+    "slug": "caro-alex",
+    "title": "Caro & Alex",
+    "place": "Punta del Este, Maldonado",
+    "venue": "Playa y parador frente al mar",
+    "category": "preboda",
+    "season": "2026",
+    "tone": "cool",
+    "video": {
+      "type": "file",
+      "src": "/assets/films/caro-alex.mp4"
+    },
+    "poster": "/assets/img/caro-alex.webp",
+    "preview": "/assets/films/caro-alex-preview.mp4",
+    "uploadDate": "2026-03-01",
+    "duration": "PT24S",
+    "summary": "Una preboda frente al mar en Punta del Este: viento en las dunas, un beso con la luna saliendo sobre el océano y una fiesta con amigos que terminó a la madrugada.",
+    "story": "[Completar fecha] Caro y Alex celebraron antes de la boda con un fin de semana en la costa. El video recorre la playa a la hora dorada, los brindis y una noche de fiesta frente al mar.",
+    "en": {
+      "place": "Punta del Este, Maldonado",
+      "venue": "Beach and seaside club",
+      "season": "2026",
+      "summary": "A pre-wedding celebration by the sea in Punta del Este: wind on the dunes, a kiss as the moon rose over the ocean and a party with friends until dawn.",
+      "story": "[To complete: date] Caro and Alex celebrated before their wedding with a weekend on the coast. The film moves through the beach at golden hour, the toasts and a night of dancing by the sea."
+    },
+    "featured": true
+  },
+  {
+    "slug": "maru-adrian",
+    "title": "Maru & Adrian",
+    "place": "Uruguay",
+    "venue": "Iglesia y estancia con parque",
+    "category": "boda",
+    "season": "Febrero 2026",
+    "tone": "warm",
+    "video": {
+      "type": "file",
+      "src": "/assets/films/maru-adrian.mp4"
+    },
+    "poster": "/assets/img/maru-adrian.webp",
+    "preview": "/assets/films/maru-adrian-preview.mp4",
+    "uploadDate": "2026-02-15",
+    "duration": "PT24S",
+    "summary": "Luz dorada en el parque, un auto antiguo, una iglesia llena y una lluvia de pétalos a la salida: la boda de Maru y Adrian.",
+    "story": "[Completar lugar] Maru y Adrian se casaron el 14 de febrero. Un día largo y luminoso, de la ceremonia en la iglesia a la noche frente a la piscina.",
+    "en": {
+      "place": "Uruguay",
+      "venue": "Church and country estate",
+      "season": "February 2026",
+      "summary": "Golden light in the park, a vintage car, a packed church and a shower of petals on the way out: Maru and Adrian's wedding.",
+      "story": "[To complete: location] Maru and Adrian got married on February 14th. A long, luminous day, from the church ceremony to the night by the pool."
+    },
+    "featured": true
+  },
+  {
     "slug": "mari-juliot",
     "title": "Mari & Juliot",
     "place": "Colonia del Sacramento",
@@ -7,8 +61,10 @@
     "category": "boda",
     "season": "Octubre 2026",
     "tone": "",
-    "featured": true,
-    "video": { "type": "file", "src": "/assets/films/mari-juliot.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/mari-juliot.mp4"
+    },
     "poster": "/assets/img/mari-juliot.webp",
     "preview": "/assets/films/mari-juliot-preview.mp4",
     "uploadDate": "2026-10-18",
@@ -21,6 +77,59 @@
       "season": "October 2026",
       "summary": "A wedding in Colonia del Sacramento with the historic Real de San Carlos bullring as a backdrop: getting ready at Charco Hotel, a ceremony among flowers and a party that took over the dance floor.",
       "story": "[To complete with Mari & Juliot's story] We filmed the whole day, from getting ready at Charco Hotel to the night in front of the illuminated bullring, with aerial shots of Real de San Carlos and an unforgettable party."
+    },
+    "featured": true
+  },
+  {
+    "slug": "agus-naomi",
+    "title": "Agus & Naomi",
+    "place": "Uruguay",
+    "venue": "Iglesia y chacra",
+    "category": "boda",
+    "season": "2026",
+    "tone": "",
+    "video": {
+      "type": "file",
+      "src": "/assets/films/agus-naomi.mp4"
+    },
+    "poster": "/assets/img/agus-naomi.webp",
+    "preview": "/assets/films/agus-naomi-preview.mp4",
+    "uploadDate": "2026-01-01",
+    "duration": "PT17S",
+    "summary": "Burbujas en el primer baile, una iglesia con candelabros y sonrisas que no se podían disimular: la boda de Agus y Naomi.",
+    "story": "[Completar lugar y fecha] Una boda clásica y emotiva, con ceremonia religiosa y una fiesta en el campo.",
+    "en": {
+      "place": "Uruguay",
+      "venue": "Church and countryside venue",
+      "season": "2026",
+      "summary": "Bubbles during the first dance, a church lit by chandeliers and smiles that couldn't be hidden: Agus and Naomi's wedding.",
+      "story": "[To complete: location and date] A classic, emotional wedding with a church ceremony and a party in the countryside."
+    }
+  },
+  {
+    "slug": "juan-sofi",
+    "title": "Juan & Sofi",
+    "place": "Montevideo",
+    "venue": "Boda urbana de noche",
+    "category": "boda",
+    "season": "2026",
+    "tone": "",
+    "video": {
+      "type": "file",
+      "src": "/assets/films/juan-sofi.mp4"
+    },
+    "poster": "/assets/img/juan-sofi.webp",
+    "preview": "/assets/films/juan-sofi-preview.mp4",
+    "uploadDate": "2026-01-01",
+    "duration": "PT21S",
+    "summary": "Una boda de ciudad: caminar de noche por las calles de Montevideo, un baile bajo los faroles y una fiesta llena de amigos.",
+    "story": "[Completar fecha y lugar exacto] Juan y Sofi eligieron la ciudad como escenario. El video los sigue por veredas y faroles hasta la fiesta.",
+    "en": {
+      "place": "Montevideo",
+      "venue": "Urban evening wedding",
+      "season": "2026",
+      "summary": "A city wedding: walking through Montevideo at night, a dance under the street lamps and a party full of friends.",
+      "story": "[To complete: date and exact venue] Juan and Sofi chose the city as their stage. The film follows them along sidewalks and street lamps all the way to the party."
     }
   },
   {
@@ -31,8 +140,10 @@
     "category": "boda",
     "season": "2026",
     "tone": "",
-    "featured": true,
-    "video": { "type": "file", "src": "/assets/films/juli-santi.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/juli-santi.mp4"
+    },
     "poster": "/assets/img/juli-santi.webp",
     "preview": "/assets/films/juli-santi-preview.mp4",
     "uploadDate": "2026-11-01",
@@ -55,8 +166,10 @@
     "category": "boda",
     "season": "Agosto 2026",
     "tone": "warm",
-    "featured": true,
-    "video": { "type": "file", "src": "/assets/films/cami-ramiro.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/cami-ramiro.mp4"
+    },
     "poster": "/assets/img/cami-ramiro.webp",
     "preview": "/assets/films/cami-ramiro-preview.mp4",
     "uploadDate": "2026-08-22",
@@ -79,7 +192,10 @@
     "category": "boda",
     "season": "Noviembre 2026",
     "tone": "cool",
-    "video": { "type": "file", "src": "/assets/films/vale-diego.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/vale-diego.mp4"
+    },
     "poster": "/assets/img/vale-diego.webp",
     "preview": "/assets/films/vale-diego-preview.mp4",
     "uploadDate": "2026-11-02",
@@ -102,7 +218,10 @@
     "category": "boda",
     "season": "2026",
     "tone": "",
-    "video": { "type": "file", "src": "/assets/films/vic-juan.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/vic-juan.mp4"
+    },
     "poster": "/assets/img/vic-juan.webp",
     "preview": "/assets/films/vic-juan-preview.mp4",
     "uploadDate": "2026-11-01",
@@ -125,7 +244,10 @@
     "category": "boda",
     "season": "2026",
     "tone": "warm",
-    "video": { "type": "file", "src": "/assets/films/j-m.mp4" },
+    "video": {
+      "type": "file",
+      "src": "/assets/films/j-m.mp4"
+    },
     "poster": "/assets/img/j-m.webp",
     "preview": "/assets/films/j-m-preview.mp4",
     "uploadDate": "2026-09-26",
