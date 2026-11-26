@@ -1,0 +1,19 @@
+{
+  "_doc": "Sector 'Una historia en 12 cuadros'. scripts/encode_media.py exporta cada cuadro (src + segundo t) a /assets/frames/. Los textos van por idioma.",
+  "film": "maru-adrian",
+  "sources": { "maru": "Maru y Adrian CORTO.mp4", "maruv": "Maru y Adrian EN VIVO FINAL.mp4" },
+  "items": [
+    { "src": "maruv", "t": 3.85,  "es": "Los detalles",      "en": "The details" },
+    { "src": "maruv", "t": 11.56, "es": "La espera",         "en": "The wait" },
+    { "src": "maruv", "t": 34.7,  "es": "Ella",              "en": "Her" },
+    { "src": "maruv", "t": 19.26, "es": "La llegada",        "en": "The arrival" },
+    { "src": "maruv", "t": 23.1,  "es": "Cuando la vio",     "en": "When he saw her" },
+    { "src": "maruv", "t": 61.2,  "es": "El sí",             "en": "I do" },
+    { "src": "maruv", "t": 100.4, "es": "El beso",           "en": "The kiss" },
+    { "src": "maruv", "t": 27.0,  "es": "La salida",         "en": "The exit" },
+    { "src": "maruv", "t": 42.4,  "es": "El camino",         "en": "The road" },
+    { "src": "maruv", "t": 46.2,  "es": "La luz de la tarde", "en": "Afternoon light" },
+    { "src": "maruv", "t": 69.3,  "es": "La fiesta",         "en": "The party" },
+    { "src": "maru",  "t": 99.5,  "es": "Para siempre",      "en": "Forever" }
+  ]
+}

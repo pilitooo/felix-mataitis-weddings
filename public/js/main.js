@@ -112,6 +112,113 @@
     });
   }
 
+  /* ---------- Una historia en 12 cuadros ----------
+     Mouse: la posición horizontal elige el cuadro (como pasar una tira de película).
+     Táctil: arrastrar en horizontal. Teclado: flechas. Miniaturas: clic.
+     Si nadie toca nada, avanza solo mientras está en pantalla. */
+  $$("[data-frames]").forEach((root) => {
+    const items = JSON.parse(root.dataset.frames);
+    const n = items.length;
+    const viewer = $(".frames-viewer", root);
+    const img = $(".frames-img", viewer);
+    const num = $(".frames-num", viewer);
+    const title = $(".frames-title", viewer);
+    const bar = $(".frames-progress span", viewer);
+    const thumbs = $$(".frames-strip button", root);
+    const strip = $(".frames-strip", root);
+    let current = 0;
+    let touched = false;
+    let timer = null;
+    let loaded = false;
+
+    // Versión liviana o grande según el ancho real del visor
+    const pick = (it) => (viewer.clientWidth * devicePixelRatio > 900 ? it.src : it.sm);
+
+    const preload = () => {
+      if (loaded) return;
+      loaded = true;
+      img.removeAttribute("srcset");
+      items.forEach((it) => { const im = new Image(); im.src = pick(it); });
+    };
+
+    const show = (i) => {
+      i = Math.max(0, Math.min(n - 1, i));
+      if (i === current && img.getAttribute("src") === pick(items[i])) return;
+      current = i;
+      img.src = pick(items[i]);
+      img.alt = items[i].title;
+      num.textContent = String(i + 1).padStart(2, "0");
+      title.textContent = items[i].title;
+      bar.style.width = `${((i + 1) / n) * 100}%`;
+      viewer.setAttribute("aria-valuenow", i + 1);
+      viewer.setAttribute("aria-valuetext", items[i].title);
+      thumbs.forEach((b, k) => b.toggleAttribute("aria-current", k === i));
+      thumbs[i].setAttribute("aria-current", "true");
+      // Mantener la miniatura activa visible en la tira (mobile)
+      const t = thumbs[i];
+      if (strip.scrollWidth > strip.clientWidth) strip.scrollTo({ left: t.offsetLeft - strip.clientWidth / 2 + t.offsetWidth / 2, behavior: "smooth" });
+    };
+
+    const interact = () => {
+      if (touched) return;
+      touched = true;
+      root.classList.add("is-touched");
+      clearInterval(timer);
+    };
+
+    const fromX = (clientX) => {
+      const r = viewer.getBoundingClientRect();
+      return Math.floor(((clientX - r.left) / r.width) * n);
+    };
+
+    // Mouse / lápiz: con sólo pasar por encima
+    viewer.addEventListener("pointermove", (e) => {
+      if (e.pointerType === "touch") return;
+      interact();
+      show(fromX(e.clientX));
+    });
+
+    // Táctil: arrastre horizontal
+    let dragStartX = null, dragStartI = 0;
+    viewer.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "touch") return;
+      interact();
+      dragStartX = e.clientX;
+      dragStartI = current;
+    });
+    viewer.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "touch" || dragStartX === null) return;
+      const step = viewer.clientWidth / n;
+      show(dragStartI + Math.round((e.clientX - dragStartX) / step));
+    });
+    ["pointerup", "pointercancel"].forEach((ev) => viewer.addEventListener(ev, () => (dragStartX = null)));
+
+    viewer.addEventListener("keydown", (e) => {
+      const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (k) { e.preventDefault(); interact(); show(current + k); }
+      if (e.key === "Home") { e.preventDefault(); interact(); show(0); }
+      if (e.key === "End") { e.preventDefault(); interact(); show(n - 1); }
+    });
+
+    thumbs.forEach((b) => b.addEventListener("click", () => { interact(); show(+b.dataset.i); }));
+
+    // Precarga al acercarse y avance automático mientras está en pantalla
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            preload();
+            if (!touched && !reduceMotion && !timer) timer = setInterval(() => show((current + 1) % n), 1900);
+          } else if (timer) {
+            clearInterval(timer);
+            timer = null;
+          }
+        }),
+      { rootMargin: "300px 0px" }
+    );
+    io.observe(viewer);
+  });
+
   /* ---------- Reveal on scroll ---------- */
   const reveals = $$(".reveal");
   if (reduceMotion || !("IntersectionObserver" in window)) {

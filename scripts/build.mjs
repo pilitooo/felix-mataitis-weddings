@@ -110,6 +110,47 @@ const breadcrumbsHtml = (trail) =>
     )
     .join("")}</ol></nav>`;
 
+/* ---------- Sector interactivo: una historia en 12 cuadros ---------- */
+const FRAMES = JSON.parse(read("frames.json"));
+const FRAMES_TXT = {
+  es: { eyebrow: "Fotogramas", title: "Una <em>historia</em> en 12 cuadros", lead: "Deslizá sobre la imagen para recorrer el día de Maru &amp; Adrian, de los detalles al último abrazo.", hint: "Deslizá", label: "Recorrer la historia cuadro por cuadro", link: "Ver el video de Maru &amp; Adrian →" },
+  en: { eyebrow: "Frames", title: "A <em>story</em> in 12 frames", lead: "Slide across the image to walk through Maru &amp; Adrian's day, from the details to the last embrace.", hint: "Slide", label: "Walk through the story frame by frame", link: "Watch Maru &amp; Adrian's film →" },
+};
+const framesHtml = (lang) => {
+  const T = FRAMES_TXT[lang];
+  const L = site.i18n[lang];
+  const base = (i) => `/assets/frames/${FRAMES.film}-${String(i + 1).padStart(2, "0")}`;
+  const items = FRAMES.items.map((it, i) => ({ src: `${base(i)}.webp`, sm: `${base(i)}-sm.webp`, title: it[lang] }));
+  const first = items[0];
+  return `
+<section class="section frames-section">
+  <div class="wrap">
+    <div class="center reveal section-head">
+      <p class="eyebrow">${T.eyebrow}</p>
+      <h2 class="display">${T.title}</h2>
+      <p class="lead">${T.lead}</p>
+    </div>
+    <div class="frames reveal" data-frames='${esc(JSON.stringify(items))}'>
+      <div class="frames-viewer" tabindex="0" role="slider" aria-label="${T.label}" aria-valuemin="1" aria-valuemax="${items.length}" aria-valuenow="1" aria-valuetext="${esc(first.title)}">
+        <img class="frames-img" src="${first.sm}" srcset="${first.sm} 800w, ${first.src} 1600w" sizes="(max-width: 1240px) 100vw, 1240px" alt="${esc(first.title)}" width="1600" height="900" loading="lazy" decoding="async">
+        <div class="frames-caption"><span class="frames-num">01</span><span class="frames-title">${esc(first.title)}</span></div>
+        <div class="frames-hint" aria-hidden="true"><span>←</span> ${T.hint} <span>→</span></div>
+        <div class="frames-progress" aria-hidden="true"><span></span></div>
+      </div>
+      <ol class="frames-strip">
+        ${items
+          .map(
+            (it, i) =>
+              `<li><button type="button" data-i="${i}" aria-label="${String(i + 1).padStart(2, "0")} · ${esc(it.title)}"${i === 0 ? ' aria-current="true"' : ""}><img src="${base(i)}-t.webp" alt="" width="240" height="135" loading="lazy" decoding="async"></button></li>`
+          )
+          .join("\n        ")}
+      </ol>
+    </div>
+    <p class="center section-foot"><a class="link-arrow" href="${L.filmsBase}${FRAMES.film}/">${T.link}</a></p>
+  </div>
+</section>`;
+};
+
 const faqHtml = (faq) =>
   `<div class="faq">${faq
     .map((x) => `<details class="reveal"><summary>${esc(x.q)}</summary><div><p>${x.a}</p></div></details>`)
@@ -205,6 +246,7 @@ function render(fm, body) {
         ...(w && { w: +w, h: +h }),
       })
     )
+    .replace(/\{\{frames\}\}/g, () => framesHtml(lang))
     .replace(/\{\{filters\}\}/g, () => filters(L))
     .replace(/\{\{cta(?::(\w+))?\}\}/g, (_, t) => cta(L, t))
     .replace(/\{\{breadcrumbs\}\}/g, () => breadcrumbsHtml(trail))

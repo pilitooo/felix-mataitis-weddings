@@ -123,3 +123,13 @@ for name, spec in EDL["stills"].items():
     w = spec.get("width", 1600)
     still(str(MAT / spec["file"]), None, f"{pre}scale='min({w},iw)':-2:flags=lanczos", OUT / "img" / f"{name}.webp", 82)
     still(str(MAT / spec["file"]), None, f"{pre}scale={w // 2}:-2:flags=lanczos", OUT / "img" / f"{name}-sm.webp", 80)
+
+# Sector interactivo "Una historia en 12 cuadros" (src/frames.json)
+FR = json.loads((ROOT / "src" / "frames.json").read_text())
+if want("frames"):
+    print("frames")
+    for i, it in enumerate(FR["items"], 1):
+        src = str(MAT / FR["sources"][it["src"]])
+        base = OUT / "frames" / f"{FR['film']}-{i:02d}"
+        for suffix, w, h, q in (("", 1600, 900, 80), ("-sm", 800, 450, 78), ("-t", 240, 135, 72)):
+            still(src, it["t"], cover(w, h), base.with_name(base.name + suffix + ".webp"), q)
