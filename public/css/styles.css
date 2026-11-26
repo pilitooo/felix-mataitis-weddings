@@ -11,10 +11,11 @@
   --paper-deep: #161412;
   --black: #070706;
   --light: #f7f4ef;     /* texto sobre fotos y videos */
+  --frame: #f4f1ec;     /* marco blanco de los videos */
   --accent: #c49a64;
   --line: rgba(236, 231, 223, 0.14);
 
-  --serif: "Cormorant Garamond", "Times New Roman", serif;
+  --serif: "Instrument Serif", "Times New Roman", serif;
   --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
 
   --max: 1240px;
@@ -883,3 +884,27 @@ a.step:hover { border-color: var(--accent); }
 /* Reproductor del film: respeta el formato cinemascope */
 .player video { object-fit: contain; background: #000; }
 .player .ph > img { object-fit: cover; }
+
+/* ---------- Marco blanco en los videos ---------- */
+.thumb {
+  padding: 6px;
+  background: var(--frame);
+}
+.player {
+  border: 10px solid var(--frame);
+  box-sizing: border-box;
+}
+.feature {
+  width: min(var(--max), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+  border: 10px solid var(--frame);
+  box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  .player, .feature { border-width: 6px; }
+  .thumb { padding: 5px; }
+}
+
+/* Instrument Serif tiene un solo peso: los títulos usan el regular */
+.display, .brand, .film-card :is(h2, h3), .feature-caption h2, .step h3,
+.quote blockquote, .lead, .faq summary, .contact-info dd, .film-meta dd { font-weight: 400; }
